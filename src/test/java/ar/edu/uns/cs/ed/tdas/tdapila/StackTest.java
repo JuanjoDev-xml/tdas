@@ -21,9 +21,9 @@ public class StackTest {
 	private Stack<String> getStack()
 	{
 		Stack<String> pila = null;
-		//pila = new PilaConLista<String>(); //TODO: Descomentar y crear instancia del TDA a testear
+		pila = new PilaArreglo<String>(); // Descomentar y crear instancia del TDA a testear
 		return pila;	  
-	 }
+	}
 	
 	/*
 	 *Inicializa la pila antes de cada test individual
@@ -81,7 +81,7 @@ public class StackTest {
 	 
 	  @Test public void top() {
 		try {
-		    s.top();
+			s.top();
 	        fail("Al ver el tope de una pila vacía (de Strings) no lanza la excepción EmptyStackException");
 	    } catch (EmptyStackException e){}
 		  try{
