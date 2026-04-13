@@ -4,9 +4,9 @@ import ar.edu.uns.cs.ed.tdas.Position;
 
 public class DNodo<E> implements Position<E>{
     // Atributos de instancia
-    private E elemento;
-    private DNodo<E> siguiente;
-    private DNodo<E> anterior;
+    protected E elemento;
+    protected DNodo<E> siguiente;
+    protected DNodo<E> anterior;
 
     // Constructores
     public DNodo(E item, DNodo<E> sig, DNodo<E> ant){
