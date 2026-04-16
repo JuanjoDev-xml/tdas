@@ -15,6 +15,8 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
     public ListaDobleEnlazadaCentinela(){
         header = new DNodo<E>(null);
         trailer = new DNodo<E>(null);
+        header.setSiguiente(trailer);
+        trailer.setAnterior(header);
         tamanio = 0;
     }
 
@@ -51,6 +53,5 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         if (n.getSiguiente() == trailer) throw new BoundaryViolationException("La posicion corresponde al ultimo elemento de la lista");
         return n.getSiguiente();
     }
-
     
 }
