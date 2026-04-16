@@ -54,4 +54,9 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         return n.getSiguiente();
     }
     
+    public Position<E> prev(Position<E> p){
+        DNodo<E> n = checkPosition(p);
+        if (n.getAnterior() == header) throw new BoundaryViolationException("La poisicon corresponde al primer elemento de la lista");
+        return n.getAnterior();
+    }
 }
