@@ -7,14 +7,14 @@ import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.Position;
 
 public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
-    protected DNodo<E> head;
-    protected DNodo<E> tail;
+    protected DNodo<E> header;
+    protected DNodo<E> trailer;
     protected int tamanio;
 
     
     public ListaDobleEnlazadaCentinela(){
-        head = new DNodo<E>(null);
-        tail = new DNodo<E>(null);
+        header = new DNodo<E>(null);
+        trailer = new DNodo<E>(null);
         tamanio = 0;
     }
 
@@ -28,12 +28,12 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
 
     public Position<E> first() throws EmptyListException{
         if (isEmpty()) throw new EmptyListException("Lista vacía");
-        return head.getSiguiente();
+        return header.getSiguiente();
     }
 
     public Position<E> last(){
         if (isEmpty()) throw new EmptyListException("Lista vacía");
-        return tail.getAnterior();
+        return trailer.getAnterior();
     }
 
     private DNodo<E> checkPosition(Position<E> p ) {
@@ -48,7 +48,7 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
     }
     public Position<E> next(Position<E> p){
         DNodo<E> n = checkPosition(p); // Propaga InvalidPositionException
-        if (n.getSiguiente() == tail) throw new BoundaryViolationException("La posicion corresponde al ultimo elemento de la lista");
+        if (n.getSiguiente() == trailer) throw new BoundaryViolationException("La posicion corresponde al ultimo elemento de la lista");
         return n.getSiguiente();
     }
 
