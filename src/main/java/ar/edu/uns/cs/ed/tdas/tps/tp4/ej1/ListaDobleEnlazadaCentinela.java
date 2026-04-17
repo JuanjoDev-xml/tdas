@@ -50,12 +50,14 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
     }
     public Position<E> next(Position<E> p){
         DNodo<E> n = checkPosition(p); // Propaga InvalidPositionException
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
         if (n.getSiguiente() == trailer) throw new BoundaryViolationException("La posicion corresponde al ultimo elemento de la lista");
         return n.getSiguiente();
     }
     
     public Position<E> prev(Position<E> p){
         DNodo<E> n = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
         if (n.getAnterior() == header) throw new BoundaryViolationException("La poisicon corresponde al primer elemento de la lista");
         return n.getAnterior();
     }
@@ -80,6 +82,7 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
 
     public void addAfter(Position<E> p, E element){
         DNodo<E> pos = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
         DNodo<E> nuevo = new DNodo<E>(element);
         nuevo.setAnterior(pos);
         nuevo.setSiguiente(pos.getSiguiente());
@@ -90,11 +93,23 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
 
     public void addBefore(Position<E> p, E element){
         DNodo<E> pos = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
         DNodo<E> nuevo = new DNodo<E>(element);
         nuevo.setSiguiente(pos);
         nuevo.setAnterior(pos.getAnterior());
         pos.getAnterior().setSiguiente(nuevo);
         pos.setAnterior(nuevo);
         tamanio++;
+    }
+
+    public E remove(Position<E> p){
+        DNodo<E> pos = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
+        E res = pos.element();
+        pos.getAnterior().setSiguiente(pos.getSiguiente());
+        pos.getSiguiente().setAnterior(pos.getAnterior());
+        pos.setSiguiente(null);
+        pos.setAnterior(null);
+        return res;
     }
 }
