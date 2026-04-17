@@ -112,4 +112,12 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         pos.setAnterior(null);
         return res;
     }
+
+    public E set(Position<E> p, E element){
+        DNodo<E> pos = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
+        E res = pos.element();
+        pos.setElemento(element);
+        return res;
+    }
 }
