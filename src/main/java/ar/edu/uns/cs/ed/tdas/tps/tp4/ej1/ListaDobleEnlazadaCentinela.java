@@ -88,7 +88,7 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         tamanio++;
     }
 
-    public void AddBefore(Position<E> p, E element){
+    public void addBefore(Position<E> p, E element){
         DNodo<E> pos = checkPosition(p);
         DNodo<E> nuevo = new DNodo<E>(element);
         nuevo.setSiguiente(pos);
