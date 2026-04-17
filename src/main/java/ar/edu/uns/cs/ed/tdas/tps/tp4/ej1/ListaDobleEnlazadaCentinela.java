@@ -77,6 +77,7 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         trailer.setAnterior(nuevo);
         tamanio++;
     }
+
     public void addAfter(Position<E> p, E element){
         DNodo<E> pos = checkPosition(p);
         DNodo<E> nuevo = new DNodo<E>(element);
@@ -84,6 +85,16 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         nuevo.setSiguiente(pos.getSiguiente());
         pos.setSiguiente(nuevo);
         nuevo.getSiguiente().setAnterior(nuevo);
+        tamanio++;
+    }
+
+    public void AddBefore(Position<E> p, E element){
+        DNodo<E> pos = checkPosition(p);
+        DNodo<E> nuevo = new DNodo<E>(element);
+        nuevo.setSiguiente(pos);
+        nuevo.setAnterior(pos.getAnterior());
+        pos.getAnterior().setSiguiente(nuevo);
+        pos.setAnterior(nuevo);
         tamanio++;
     }
 }
