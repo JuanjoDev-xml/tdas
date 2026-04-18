@@ -182,5 +182,16 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
     }
 
     // Inciso c
-    
+
+    public boolean alMenosNVeces(PositionList<E> l, E x, int n){
+        Iterator<E> it = l.iterator();
+        int cant = 0;
+        while(it.hasNext()){
+            if (it.next() == x)
+                cant++;
+            if (cant >= n)
+                return true;
+        }
+        return false;
+    }
 }
