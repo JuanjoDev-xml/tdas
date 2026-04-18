@@ -168,4 +168,19 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         }
         return false;
     }
+
+    // Inciso b
+
+    public int cantidad(PositionList<E> l, E e1){
+        int res = 0;
+        Iterator<E> it = l.iterator();
+        while(it.hasNext()){
+            if (it.next().equals(e1))
+                res++;
+        }
+        return res;
+    }
+
+    // Inciso c
+    
 }
