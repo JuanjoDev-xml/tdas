@@ -194,4 +194,19 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         }
         return false;
     }
+
+
+    // Ejercicio 4
+
+    public PositionList<E> repetidos(PositionList<E> l){
+        if (l.isEmpty()) throw new EmptyListException("Lista vacía");
+        PositionList<E> res = new ListaDobleEnlazadaCentinela<>();
+        for (Position<E> p : l.positions()){
+            res.addAfter(p, p.element());
+        }
+        return res;
+    }
+
+
+    // Ejercicio 5
 }
