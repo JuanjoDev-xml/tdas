@@ -160,5 +160,12 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
 
     // Inciso a
 
-    
+    public boolean pertenece(PositionList<E> l, E e1){
+        Iterator<E> it = l.iterator();
+        while (it.hasNext()) {
+            if (it.next().equals(e1))
+                return true;
+        }
+        return false;
+    }
 }
