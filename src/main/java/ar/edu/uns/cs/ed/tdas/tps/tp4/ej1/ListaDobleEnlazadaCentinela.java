@@ -6,6 +6,8 @@ import ar.edu.uns.cs.ed.tdas.excepciones.InvalidPositionException;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.Position;
 
+import java.util.Iterator;
+
 public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
     protected DNodo<E> header;
     protected DNodo<E> trailer;
@@ -120,4 +122,21 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         pos.setElemento(element);
         return res;
     }
+
+
+
+    public Iterator<E> iterator(){
+        return new ElementIterator<E>(this);
+    }
+
+    public Iterable<Position<E>> positions(){
+        PositionList<Position<E>> lista = new ListaDobleEnlazadaCentinela<>();
+        DNodo<E> cursor = header.getSiguiente();
+        while (cursor != trailer){
+            lista.addLast(cursor);
+            cursor = cursor.getSiguiente();
+        }
+        return lista;
+
+    } 
 }
