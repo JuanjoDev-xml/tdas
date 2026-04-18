@@ -137,6 +137,28 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
             cursor = cursor.getSiguiente();
         }
         return lista;
+    }
 
-    } 
+
+
+
+
+
+    // Ejercicio 2
+
+    public void Ejercicio2(E e1, E e2){
+        if (isEmpty()){
+            addFirst(e1);
+            addFirst(e2);
+        }
+        addAfter(header.siguiente, e1);
+        addBefore(trailer.anterior, e2);
+    }
+
+
+    // Ejercicio 3
+
+    // Inciso a
+
+    
 }
