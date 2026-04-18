@@ -200,7 +200,7 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
 
     public PositionList<E> repetidos(PositionList<E> l){
         if (l.isEmpty()) throw new EmptyListException("Lista vacía");
-        PositionList<E> res = new ListaDobleEnlazadaCentinela<>();
+        PositionList<E> res = l;
         for (Position<E> p : l.positions()){
             res.addAfter(p, p.element());
         }
@@ -208,5 +208,48 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
     }
 
 
-    // Ejercicio 5
+    // Ejercicio 5 ?????????????????????????????????????
+
+    private void eliminar(Position<Character> p, PositionList<Character> l){
+        for (Position<Character> x : l.positions()){
+            if (x.equals(p)){
+                DNodo<Character> n = (DNodo<Character>) p;
+                n.getAnterior().setSiguiente(n.getSiguiente());
+                n.getSiguiente().setAnterior(n.getAnterior());
+                n.setAnterior(null);
+                n.setSiguiente(null);
+                // Debería decrementar tamaño de l
+            }
+        }
+    }
+    private boolean pertenece(Position<Character> p, PositionList<Character> l){
+        if (l.isEmpty()) throw new EmptyListException("Lista vacía");
+        for (Position<Character> x : l.positions()){
+            if (x.equals(p))
+                return true;
+        }
+        return false;
+    }
+    public Iterable<Character> ejercicio5(PositionList<Character> l1, PositionList<Character> l2){
+        if (l1.isEmpty() || l2.isEmpty()) throw new EmptyListException("Alguna lista está vacía");
+        Iterable<Position<Character>> l1pos = l1.positions();
+        Iterator<Position<Character>> it = l1pos.iterator();
+
+        ListaDobleEnlazadaCentinela<Character> res = new ListaDobleEnlazadaCentinela<>();
+        while (it.hasNext()) {
+            Position<Character> p = it.next();
+            if (pertenece(p, l2)){
+                res.addLast(p.element());
+                eliminar(p, l2);
+            }
+        }
+        return res;
+    }
+
+
+    // Ejercicio 6
+
+    // Inciso a
+
+    
 }
