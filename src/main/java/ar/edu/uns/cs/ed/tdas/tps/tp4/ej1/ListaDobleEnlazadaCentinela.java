@@ -270,10 +270,18 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         return res;
     }
 
-    // Inciso b
+    // Inciso b ????????????????????????
 
+    private boolean pertenece2(PositionList<Integer> l, Position<Integer> p){
+        if (l.isEmpty()) throw new EmptyListException("Lista vacía");
+        for (Position<Integer> x : l.positions()){
+            if (x.equals(p))
+                return true;
+        }
+        return false;
+    }
     public PositionList<Integer> intercalacionOrdenada(PositionList<Integer> l1, PositionList<Integer> l2){
-        PositionList<Integer> res = new ListaDobleEnlazadaCentinela<>();
+        PositionList<Integer> res = new ListaDobleEnlazadaCentinela<Integer>();
 
         Iterator<Integer> it1 = l1.iterator();
         Iterator<Integer> it2 = l2.iterator();
@@ -298,5 +306,21 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
                 res.addLast(it2Next);           
         }
         return res;
+    }
+
+
+    // Ejercicio 7 ??????????????????
+
+    public void eliminar7(PositionList<E> l1, PositionList<E> l2){
+        for(Position<E> p : l1.positions()){
+            if (p.pertenece(l2))
+                l1.eliminar(p);
+        }
+
+        PositionList<E> l3 = inversa(l2);
+
+        for(E e : l3){
+            l1.addLast(e);
+        }
     }
 }
