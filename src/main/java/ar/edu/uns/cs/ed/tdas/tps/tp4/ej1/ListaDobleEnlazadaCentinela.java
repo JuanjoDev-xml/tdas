@@ -267,5 +267,36 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
         while (it2.hasNext()) {
             res.addLast(it2.next());            
         }
+        return res;
+    }
+
+    // Inciso b
+
+    public PositionList<Integer> intercalacionOrdenada(PositionList<Integer> l1, PositionList<Integer> l2){
+        PositionList<Integer> res = new ListaDobleEnlazadaCentinela<>();
+
+        Iterator<Integer> it1 = l1.iterator();
+        Iterator<Integer> it2 = l2.iterator();
+        int it1Next;
+        int it2Next;
+        while (it1.hasNext() && it2.hasNext()) {
+            it1Next = it1.next();
+            it2Next = it2.next();
+            if (!pertenece2(res, it1Next))
+                res.addLast(it1Next);
+            if (!pertenece2(res, it2Next))
+                res.addLast(it2Next);            
+        }
+        while (it1.hasNext()) {
+            it1Next = it1.next();
+            if (!pertenece2(res, it1Next))
+                res.addLast(it1Next);           
+        }
+        while (it2.hasNext()) {
+            it2Next = it2.next();
+            if (!pertenece2(res, it2Next))
+                res.addLast(it2Next);           
+        }
+        return res;
     }
 }
