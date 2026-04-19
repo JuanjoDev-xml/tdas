@@ -218,6 +218,7 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
                 n.getSiguiente().setAnterior(n.getAnterior());
                 n.setAnterior(null);
                 n.setSiguiente(null);
+                n.setElemento(null);
                 // Debería decrementar tamaño de l
             }
         }
@@ -251,5 +252,20 @@ public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
 
     // Inciso a
 
-    
+    public PositionList<E> intercalacion(PositionList<E> l1, PositionList<E> l2){
+        PositionList<E> res = new ListaDobleEnlazadaCentinela<>();
+
+        Iterator<E> it1 = l1.iterator();
+        Iterator<E> it2 = l2.iterator();
+        while (it1.hasNext() && it2.hasNext()) {
+            res.addLast(it1.next());
+            res.addLast(it2.next());            
+        }
+        while (it1.hasNext()) {
+            res.addLast(it1.next());            
+        }
+        while (it2.hasNext()) {
+            res.addLast(it2.next());            
+        }
+    }
 }
