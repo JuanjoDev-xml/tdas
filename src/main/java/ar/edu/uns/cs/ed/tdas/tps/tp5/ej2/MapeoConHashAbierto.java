@@ -11,12 +11,15 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
     protected static final float factorDeCarga = 0.7f;
     // Atributos de instancia
     protected int N; // tamaño del arreglo
-    protected PositionList<Entry<K,V>>[] A; // Entry o Entrada???
+    protected PositionList<Entry<K,V>>[] A; // Entry o Entrada ????????????? PositionList o ListaDobleEnlazada??????
     protected int tamanio; // cantidad total de entradas
     // Constructores
     public MapeoConHashAbierto(){
         N = 37;
-        A = (PositionList<Entry<K,V>>[]) new ListaDobleEnlazadaCentinela[N];
+        A = (PositionList<Entry<K,V>>[]) new ListaDobleEnlazadaCentinela[N]; // Entry???? PositionList o ListaDoble???
+        for (int i = 0; i < N; i++){
+            A[i] = new ListaDobleEnlazadaCentinela<Entry<K,V>>();
+        }
     }
     // Métodos
     public int size(){
@@ -30,8 +33,21 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
         return Math.abs(key.hashCode()%N);
     }
 
-    private void rehash(){
-        
+    private void rehash(){ // !!!!!!!!!!!!!!!!!!
+        PositionList<Entry<K,V>>[] arregloViejo = A;
+        int NViejo = N;
+        N = N*2;
+        A = (PositionList<Entry<K,V>>[]) new ListaDobleEnlazadaCentinela[N];
+        for (int i = 0; i < N; i++){
+            A[i] = new ListaDobleEnlazadaCentinela<>();
+        }
+        for (int i = 0; i < NViejo; i++){
+            for (Entry<K,V> e : arregloViejo[i]){
+                int indice = hashYCompresion(e.getKey());
+                A[indice].addLast(e);
+            }
+        }
+
     }
 
     public V get(K key){
