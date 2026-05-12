@@ -74,8 +74,21 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
         }
         bucket.addLast(new Entrada<K,V>(key, value));
         tamanio++;
-        if (factorDeCarga < N/tamanio)
+        if (factorDeCarga < tamanio/N)
             rehash();
+        return null;
+    }
+    public V remove(K key){
+        if (key == null) throw new InvalidKeyException("Clave nula");
+        int i = hashYCompresion(key);
+        for (Position<Entry<K,V>> p : A[i].positions()){
+            if (key.equals(p.element().getKey())){
+                V res = p.element().getValue();
+                A[i].remove(p);
+                tamanio--;
+                return res;
+            }
+        }
         return null;
     }
 }
