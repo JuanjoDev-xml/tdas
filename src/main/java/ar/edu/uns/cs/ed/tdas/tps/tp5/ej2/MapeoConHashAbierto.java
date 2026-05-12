@@ -96,8 +96,8 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
     public Iterable<K> keys(){
         ListaDobleEnlazadaCentinela<K> res = new ListaDobleEnlazadaCentinela<>();
         for (int i = 0; i < N; i++){
-            for (Position<Entry<K,V>> p : A[i].positions()){
-                res.addLast(p.element().getKey());
+            for (Entry<K,V> e : A[i]){
+                res.addLast(e.getKey());
             }
         }
         return res;
@@ -105,8 +105,17 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
     public Iterable<V> values(){
         ListaDobleEnlazadaCentinela<V> res = new ListaDobleEnlazadaCentinela<>();
         for (int i = 0; i<N; i++){
-            for(Position<Entry<K,V>> p : A[i].positions()){
-                res.addLast(p.element().getValue());
+            for(Entry<K,V> e : A[i]){
+                res.addLast(e.getValue());
+            }
+        }
+        return res;
+    }
+    public Iterable<Entry<K,V>> entries(){
+        ListaDobleEnlazadaCentinela<Entry<K,V>> res = new ListaDobleEnlazadaCentinela<>();
+        for (int i = 0; i < N; i++){
+            for (Entry<K,V> e : A[i]){
+                res.addLast(e);
             }
         }
         return res;
