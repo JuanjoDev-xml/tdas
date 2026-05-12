@@ -1,5 +1,7 @@
 package ar.edu.uns.cs.ed.tdas.tps.tp5.ej2;
 
+import java.security.Key;
+
 import ar.edu.uns.cs.ed.tdas.Entry;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.Position;
@@ -17,7 +19,7 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
     public MapeoConHashAbierto(){
         N = 37;
         A = (PositionList<Entry<K,V>>[]) new ListaDobleEnlazadaCentinela[N]; // Entry???? PositionList o ListaDoble???
-        for (int i = 0; i < N; i++){
+        for (int i = 0; i < N; i++){ // cada bucket deberia ser una lista o una entrada ???????
             A[i] = new ListaDobleEnlazadaCentinela<Entry<K,V>>();
         }
     }
@@ -90,5 +92,14 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
             }
         }
         return null;
+    }
+    public Iterable<K> keys(){
+        ListaDobleEnlazadaCentinela<K> res = new ListaDobleEnlazadaCentinela<>();
+        for (int i = 0; i < N; i++){
+            for (Position<Entry<K,V>> p : A[i].positions()){
+                res.addLast(p.element().getKey());
+            }
+        }
+        return res;
     }
 }
