@@ -1,0 +1,326 @@
+package ar.edu.uns.cs.ed.tdas.tps.tp5.ej3;
+
+import ar.edu.uns.cs.ed.tdas.excepciones.BoundaryViolationException;
+import ar.edu.uns.cs.ed.tdas.excepciones.EmptyListException;
+import ar.edu.uns.cs.ed.tdas.excepciones.InvalidPositionException;
+import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
+import ar.edu.uns.cs.ed.tdas.Position;
+
+import java.util.Iterator;
+
+public class ListaDobleEnlazadaCentinela<E> implements PositionList<E>{
+    protected DNodo<E> header;
+    protected DNodo<E> trailer;
+    protected int tamanio;
+
+    
+    public ListaDobleEnlazadaCentinela(){
+        header = new DNodo<E>(null);
+        trailer = new DNodo<E>(null);
+        header.setSiguiente(trailer);
+        trailer.setAnterior(header);
+        tamanio = 0;
+    }
+
+    public int size(){
+        return tamanio;
+    }
+
+    public boolean isEmpty(){
+        return tamanio == 0;
+    }
+
+    public Position<E> first() throws EmptyListException{
+        if (isEmpty()) throw new EmptyListException("Lista vacía");
+        return header.getSiguiente();
+    }
+
+    public Position<E> last(){
+        if (isEmpty()) throw new EmptyListException("Lista vacía");
+        return trailer.getAnterior();
+    }
+
+    private DNodo<E> checkPosition(Position<E> p ) {
+        try {
+            if ( p == null ) throw new InvalidPositionException("Posición nula");
+            if (p.element() == null) throw new InvalidPositionException("p eliminada previamente");
+            return (DNodo<E>) p; // Puede fallar si p es una posición que corresponde a un nodo de otro tipo de estructura de datos
+        }
+        catch( ClassCastException e ) { // Vengo acá porque falló el casting a Nodo
+                throw new InvalidPositionException("p no es un nodo de lista");
+        }
+    }
+    public Position<E> next(Position<E> p){
+        DNodo<E> n = checkPosition(p); // Propaga InvalidPositionException
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
+        if (n.getSiguiente() == trailer) throw new BoundaryViolationException("La posicion corresponde al ultimo elemento de la lista");
+        return n.getSiguiente();
+    }
+    
+    public Position<E> prev(Position<E> p){
+        DNodo<E> n = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
+        if (n.getAnterior() == header) throw new BoundaryViolationException("La poisicon corresponde al primer elemento de la lista");
+        return n.getAnterior();
+    }
+
+    public void addFirst(E element){
+        DNodo<E> nuevo = new DNodo<E>(element);
+        nuevo.setAnterior(header);
+        nuevo.setSiguiente(header.getSiguiente());
+        header.getSiguiente().setAnterior(nuevo);
+        header.setSiguiente(nuevo);
+        tamanio++;
+    }
+
+    public void addLast(E element){
+        DNodo<E> nuevo = new DNodo<E>(element);
+        nuevo.setAnterior(trailer.getAnterior());
+        nuevo.setSiguiente(trailer);
+        nuevo.getAnterior().setSiguiente(nuevo);
+        trailer.setAnterior(nuevo);
+        tamanio++;
+    }
+
+    public void addAfter(Position<E> p, E element){
+        DNodo<E> pos = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
+        DNodo<E> nuevo = new DNodo<E>(element);
+        nuevo.setAnterior(pos);
+        nuevo.setSiguiente(pos.getSiguiente());
+        pos.setSiguiente(nuevo);
+        nuevo.getSiguiente().setAnterior(nuevo);
+        tamanio++;
+    }
+
+    public void addBefore(Position<E> p, E element){
+        DNodo<E> pos = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
+        DNodo<E> nuevo = new DNodo<E>(element);
+        nuevo.setSiguiente(pos);
+        nuevo.setAnterior(pos.getAnterior());
+        pos.getAnterior().setSiguiente(nuevo);
+        pos.setAnterior(nuevo);
+        tamanio++;
+    }
+
+    public E remove(Position<E> p){
+        DNodo<E> pos = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
+        E res = pos.element();
+        pos.getAnterior().setSiguiente(pos.getSiguiente());
+        pos.getSiguiente().setAnterior(pos.getAnterior());
+        pos.setSiguiente(null);
+        pos.setAnterior(null);
+        return res;
+    }
+
+    public E set(Position<E> p, E element){
+        DNodo<E> pos = checkPosition(p);
+        if (isEmpty()) throw new InvalidPositionException("Lista vacía");
+        E res = pos.element();
+        pos.setElemento(element);
+        return res;
+    }
+
+
+
+    public Iterator<E> iterator(){
+        return new ElementIterator<E>(this);
+    }
+
+    public Iterable<Position<E>> positions(){
+        PositionList<Position<E>> lista = new ListaDobleEnlazadaCentinela<>();
+        DNodo<E> cursor = header.getSiguiente();
+        while (cursor != trailer){
+            lista.addLast(cursor);
+            cursor = cursor.getSiguiente();
+        }
+        return lista;
+    }
+
+
+
+
+
+
+    // Ejercicio 2
+
+    public void Ejercicio2(E e1, E e2){
+        if (isEmpty()){
+            addFirst(e1);
+            addFirst(e2);
+        }
+        addAfter(header.siguiente, e1);
+        addBefore(trailer.anterior, e2);
+    }
+
+
+    // Ejercicio 3
+
+    // Inciso a
+
+    public boolean pertenece(PositionList<E> l, E e1){
+        Iterator<E> it = l.iterator();
+        while (it.hasNext()) {
+            if (it.next().equals(e1))
+                return true;
+        }
+        return false;
+    }
+
+    // Inciso b
+
+    public int cantidad(PositionList<E> l, E e1){
+        int res = 0;
+        Iterator<E> it = l.iterator();
+        while(it.hasNext()){
+            if (it.next().equals(e1))
+                res++;
+        }
+        return res;
+    }
+
+    // Inciso c
+
+    public boolean alMenosNVeces(PositionList<E> l, E x, int n){
+        Iterator<E> it = l.iterator();
+        int cant = 0;
+        while(it.hasNext()){
+            if (it.next() == x)
+                cant++;
+            if (cant >= n)
+                return true;
+        }
+        return false;
+    }
+
+
+    // Ejercicio 4
+
+    public PositionList<E> repetidos(PositionList<E> l){
+        if (l.isEmpty()) throw new EmptyListException("Lista vacía");
+        PositionList<E> res = l;
+        for (Position<E> p : l.positions()){
+            res.addAfter(p, p.element());
+        }
+        return res;
+    }
+
+
+    // Ejercicio 5 ?????????????????????????????????????
+
+    private void eliminar(Position<Character> p, PositionList<Character> l){
+        for (Position<Character> x : l.positions()){
+            if (x.equals(p)){
+                DNodo<Character> n = (DNodo<Character>) p;
+                n.getAnterior().setSiguiente(n.getSiguiente());
+                n.getSiguiente().setAnterior(n.getAnterior());
+                n.setAnterior(null);
+                n.setSiguiente(null);
+                n.setElemento(null);
+                // Debería decrementar tamaño de l
+            }
+        }
+    }
+    private boolean pertenece(Position<Character> p, PositionList<Character> l){
+        if (l.isEmpty()) throw new EmptyListException("Lista vacía");
+        for (Position<Character> x : l.positions()){
+            if (x.equals(p))
+                return true;
+        }
+        return false;
+    }
+    public Iterable<Character> ejercicio5(PositionList<Character> l1, PositionList<Character> l2){
+        if (l1.isEmpty() || l2.isEmpty()) throw new EmptyListException("Alguna lista está vacía");
+        Iterable<Position<Character>> l1pos = l1.positions();
+        Iterator<Position<Character>> it = l1pos.iterator();
+
+        ListaDobleEnlazadaCentinela<Character> res = new ListaDobleEnlazadaCentinela<>();
+        while (it.hasNext()) {
+            Position<Character> p = it.next();
+            if (pertenece(p, l2)){
+                res.addLast(p.element());
+                eliminar(p, l2);
+            }
+        }
+        return res;
+    }
+
+
+    // Ejercicio 6
+
+    // Inciso a
+
+    public PositionList<E> intercalacion(PositionList<E> l1, PositionList<E> l2){
+        PositionList<E> res = new ListaDobleEnlazadaCentinela<>();
+
+        Iterator<E> it1 = l1.iterator();
+        Iterator<E> it2 = l2.iterator();
+        while (it1.hasNext() && it2.hasNext()) {
+            res.addLast(it1.next());
+            res.addLast(it2.next());            
+        }
+        while (it1.hasNext()) {
+            res.addLast(it1.next());            
+        }
+        while (it2.hasNext()) {
+            res.addLast(it2.next());            
+        }
+        return res;
+    }
+
+    // Inciso b ????????????????????????
+
+    // private boolean pertenece2(PositionList<Integer> l, Position<Integer> p){
+    //     if (l.isEmpty()) throw new EmptyListException("Lista vacía");
+    //     for (Position<Integer> x : l.positions()){
+    //         if (x.equals(p))
+    //             return true;
+    //     }
+    //     return false;
+    }
+    // public PositionList<Integer> intercalacionOrdenada(PositionList<Integer> l1, PositionList<Integer> l2){
+    //     PositionList<Integer> res = new ListaDobleEnlazadaCentinela<Integer>();
+
+    //     Iterator<Integer> it1 = l1.iterator();
+    //     Iterator<Integer> it2 = l2.iterator();
+    //     int it1Next;
+    //     int it2Next;
+    //     while (it1.hasNext() && it2.hasNext()) {
+    //         it1Next = it1.next();
+    //         it2Next = it2.next();
+    //         if (!pertenece2(res, it1Next))
+    //             res.addLast(it1Next);
+    //         if (!pertenece2(res, it2Next))
+    //             res.addLast(it2Next);            
+    //     }
+    //     while (it1.hasNext()) {
+    //         it1Next = it1.next();
+    //         if (!pertenece2(res, it1Next))
+    //             res.addLast(it1Next);           
+    //     }
+    //     while (it2.hasNext()) {
+    //         it2Next = it2.next();
+    //         if (!pertenece2(res, it2Next))
+    //             res.addLast(it2Next);           
+    //     }
+    //     return res;
+    // }
+
+
+    // // Ejercicio 7 ??????????????????
+
+    // public void eliminar7(PositionList<E> l1, PositionList<E> l2){
+    //     for(Position<E> p : l1.positions()){
+    //         if (p.pertenece(l2))
+    //             l1.eliminar(p);
+    //     }
+
+    //     PositionList<E> l3 = inversa(l2);
+
+    //     for(E e : l3){
+    //         l1.addLast(e);
+    //     }
+    // }
+

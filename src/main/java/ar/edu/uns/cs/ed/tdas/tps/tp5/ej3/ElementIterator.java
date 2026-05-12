@@ -1,4 +1,4 @@
-package ar.edu.uns.cs.ed.tdas.tps.tp5.ej2;
+package ar.edu.uns.cs.ed.tdas.tps.tp5.ej3;
 
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.Position;
