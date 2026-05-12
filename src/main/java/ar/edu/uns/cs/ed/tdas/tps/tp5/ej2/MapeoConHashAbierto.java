@@ -102,4 +102,13 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
         }
         return res;
     }
+    public Iterable<V> values(){
+        ListaDobleEnlazadaCentinela<V> res = new ListaDobleEnlazadaCentinela<>();
+        for (int i = 0; i<N; i++){
+            for(Position<Entry<K,V>> p : A[i].positions()){
+                res.addLast(p.element().getValue());
+            }
+        }
+        return res;
+    }
 }
