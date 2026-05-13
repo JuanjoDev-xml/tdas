@@ -30,4 +30,29 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
     public boolean isEmpty(){
         return size() == 0;
     }
+
+    public int hashYCompresion(K key){
+        return Math.abs(key.hashCode()%N);
+    }
+    
+    public void rehash(){
+        int NViejo = N;
+        PositionList<Entry<K,V>>[] arregloViejo = A;
+        N = N*2;
+        A = (PositionList<Entry<K,V>>[]) new ListaDobleEnlazadaCentinela[N];
+        for (int i = 0; i < N; i++){
+            A[i] = new ListaDobleEnlazadaCentinela<Entry<K,V>>();
+        }
+        int indice;
+        for (int i = 0; i < NViejo; i++){
+            for (Entry<K,V> e : arregloViejo[i]){
+                indice = hashYCompresion(e.getKey());
+                A[indice].addLast(e);
+            }
+        }
+    }
+
+    public Entry<K,V> find(K key){
+
+    }
 }
