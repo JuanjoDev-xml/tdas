@@ -24,5 +24,8 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
         }
     }
     // Methods
+    public int size(){
+        return tamanio;
+    }
     
 }
