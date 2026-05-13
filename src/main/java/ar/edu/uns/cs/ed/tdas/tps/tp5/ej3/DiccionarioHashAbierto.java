@@ -27,5 +27,7 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
     public int size(){
         return tamanio;
     }
-    
+    public boolean isEmpty(){
+        return size() == 0;
+    }
 }
