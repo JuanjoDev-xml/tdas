@@ -4,6 +4,7 @@ import java.security.Key;
 
 import ar.edu.uns.cs.ed.tdas.Entry;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
+import ar.edu.uns.cs.ed.tdas.tps.tp4.ej1.ListaDobleEnlazadaCentinela;
 import ar.edu.uns.cs.ed.tdas.Position;
 import ar.edu.uns.cs.ed.tdas.excepciones.InvalidKeyException;
 public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
@@ -13,4 +14,15 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
     protected PositionList<Entry<K,V>>[] A;
     protected int N;
     protected int tamanio;
+    // Constructors
+    public DiccionarioHashAbierto(){
+        N = 37;
+        tamanio = 0;
+        A = (PositionList<Entry<K,V>>[]) new ListaDobleEnlazadaCentinela[N];
+        for (int i = 0; i < N; i++){
+            A[i] = new ListaDobleEnlazadaCentinela<Entry<K,V>>();
+        }
+    }
+    // Methods
+    
 }
