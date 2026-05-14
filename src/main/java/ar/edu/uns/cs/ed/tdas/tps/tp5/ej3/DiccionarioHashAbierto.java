@@ -53,6 +53,13 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
     }
 
     public Entry<K,V> find(K key){
-        
+        if (key == null) throw new InvalidKeyException("Clave nula");
+        int i = hashYCompresion(key);
+        for (Entry<K,V> e : A[i]){
+            if (e.getKey().equals(key))
+                return e;
+        }
+        return null;
     }
+    
 }
