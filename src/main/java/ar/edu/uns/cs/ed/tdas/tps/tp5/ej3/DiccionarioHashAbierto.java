@@ -97,6 +97,11 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
     }
     public Iterable<Entry<K,V>> entries(){
         PositionList<Entry<K,V>> res = new ListaDobleEnlazadaCentinela<>();
-
+        for (int i = 0; i < N; i++){
+            for (Entry<K,V> e : A[i]){
+                res.addLast(e);
+            }
+        }
+        return res;
     }
 }
