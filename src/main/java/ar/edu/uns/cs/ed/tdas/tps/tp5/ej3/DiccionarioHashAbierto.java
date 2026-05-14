@@ -77,6 +77,9 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
         int i = hashYCompresion(key);
         Entry<K,V> e = new Entrada<>(key, value);
         A[i].addLast(e);
+        tamanio++;
+        if (tamanio/N > factorDeCarga)
+            rehash();
         return e;
     }
     public Entry<K,V> remove(Entry<K,V> e){
@@ -91,5 +94,8 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
         }
         throw new InvalidEntryException("La entrada no pertenece al diccionario");
     }
-    
+    public Iterable<Entry<K,V>> entries(){
+        PositionList<Entry<K,V>> res = new ListaDobleEnlazadaCentinela<>();
+
+    }
 }
