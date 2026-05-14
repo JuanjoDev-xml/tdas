@@ -89,6 +89,7 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
             if (p.element().equals(e)){
                 Entry<K,V> res = p.element();
                 A[i].remove(p);
+                tamanio--;
                 return res;
             }
         }
