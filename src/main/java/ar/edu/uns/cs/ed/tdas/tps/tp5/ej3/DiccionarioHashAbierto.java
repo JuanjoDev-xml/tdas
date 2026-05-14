@@ -76,6 +76,7 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
         int i = hashYCompresion(key);
         Entry<K,V> e = new Entrada<>(key, value);
         A[i].addLast(e);
+        return e;
     }
     
 }
