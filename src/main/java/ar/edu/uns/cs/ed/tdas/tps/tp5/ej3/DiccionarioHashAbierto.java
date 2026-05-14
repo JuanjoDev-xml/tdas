@@ -53,6 +53,6 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
     }
 
     public Entry<K,V> find(K key){
-
+        
     }
 }

@@ -35,16 +35,16 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
         return Math.abs(key.hashCode()%N);
     }
 
-    private void rehash(){ // !!!!!!!!!!!!!!!!!!
+    private void rehash(){ // !!!!!!!!!!!!!!!!!! O(n^2) ??
         PositionList<Entry<K,V>>[] arregloViejo = A;
         int NViejo = N;
         N = N*2;
         A = (PositionList<Entry<K,V>>[]) new ListaDobleEnlazadaCentinela[N];
         for (int i = 0; i < N; i++){
-            A[i] = new ListaDobleEnlazadaCentinela<>();
+            A[i] = new ListaDobleEnlazadaCentinela<>(); // O(n) ?????
         }
         for (int i = 0; i < NViejo; i++){
-            for (Entry<K,V> e : arregloViejo[i]){
+            for (Entry<K,V> e : arregloViejo[i]){ // O(n^2) ???????
                 int indice = hashYCompresion(e.getKey());
                 A[indice].addLast(e);
             }
@@ -52,7 +52,7 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
 
     }
 
-    public V get(K key){
+    public V get(K key){ // O(n) ?????
         if (key == null) throw new InvalidKeyException("Clave nula");
         int i = hashYCompresion(key);
         PositionList<Entry<K,V>> bucket = A[i];
@@ -62,7 +62,7 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
         }
         return null;
     }
-    public V put(K key, V value){
+    public V put(K key, V value){ // O(n)
         if (key == null) throw new InvalidKeyException("Clave nula");
         int i = hashYCompresion(key);
         PositionList<Entry<K,V>> bucket = A[i];
@@ -93,7 +93,7 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
         }
         return null;
     }
-    public Iterable<K> keys(){
+    public Iterable<K> keys(){ // O(n^2) ?????
         ListaDobleEnlazadaCentinela<K> res = new ListaDobleEnlazadaCentinela<>();
         for (int i = 0; i < N; i++){
             for (Entry<K,V> e : A[i]){
@@ -102,7 +102,7 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
         }
         return res;
     }
-    public Iterable<V> values(){
+    public Iterable<V> values(){ // O(n^2)
         ListaDobleEnlazadaCentinela<V> res = new ListaDobleEnlazadaCentinela<>();
         for (int i = 0; i<N; i++){
             for(Entry<K,V> e : A[i]){
@@ -111,7 +111,7 @@ public class MapeoConHashAbierto<K,V> implements Map<K,V>{
         }
         return res;
     }
-    public Iterable<Entry<K,V>> entries(){
+    public Iterable<Entry<K,V>> entries(){ // O(n^2)
         ListaDobleEnlazadaCentinela<Entry<K,V>> res = new ListaDobleEnlazadaCentinela<>();
         for (int i = 0; i < N; i++){
             for (Entry<K,V> e : A[i]){
