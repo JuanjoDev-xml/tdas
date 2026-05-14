@@ -71,5 +71,11 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
         }
         return res;
     }
+    public Entry<K,V> insert(K key, V value){
+        if (key == null) throw new InvalidKeyException("Clave nula");
+        int i = hashYCompresion(key);
+        Entry<K,V> e = new Entrada<>(key, value);
+        A[i].addLast(e);
+    }
     
 }
