@@ -61,5 +61,15 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
         }
         return null;
     }
+    public Iterable<Entry<K,V>> findAll(K key){ // las claves con el mismo key van siempre en el mismo bucket ??????
+        if (key == null) throw new InvalidKeyException("Clave nula");
+        PositionList<Entry<K,V>> res = new ListaDobleEnlazadaCentinela<>();
+        int i = hashYCompresion(key);
+        for (Entry<K,V> e : A[i]){
+            if (e.getKey().equals(key))
+                res.addLast(e);
+        }
+        return res;
+    }
     
 }
