@@ -6,6 +6,7 @@ import ar.edu.uns.cs.ed.tdas.Entry;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.tps.tp4.ej1.ListaDobleEnlazadaCentinela;
 import ar.edu.uns.cs.ed.tdas.Position;
+import ar.edu.uns.cs.ed.tdas.excepciones.InvalidEntryException;
 import ar.edu.uns.cs.ed.tdas.excepciones.InvalidKeyException;
 public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
     // Atributos de clase
@@ -77,6 +78,18 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
         Entry<K,V> e = new Entrada<>(key, value);
         A[i].addLast(e);
         return e;
+    }
+    public Entry<K,V> remove(Entry<K,V> e){
+        if (e == null) throw new InvalidEntryException("Entrada nula");
+        int i = hashYCompresion(e.getKey());
+        for (Position<Entry<K,V>> p : A[i].positions()){
+            if (p.element().equals(e)){
+                Entry<K,V> res = p.element();
+                A[i].remove(p);
+                return res;
+            }
+        }
+        throw new InvalidEntryException("La entrada no pertenece al diccionario");
     }
     
 }
