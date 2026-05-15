@@ -104,4 +104,22 @@ public class DiccionarioHashAbierto<K,V> implements Dictionary<K,V>{
         }
         return res;
     }
+
+
+
+    // Ejercicio 5
+
+    public Iterable<Entry<K,V>> eliminarTodas(K c, V v) throws InvalidKeyException{
+        if (c == null) throw new InvalidKeyException("Clave nula");
+        int i = hashYCompresion(c);
+        ListaDobleEnlazadaCentinela<Entry<K,V>> res = new ListaDobleEnlazadaCentinela<>();
+        for (Entry<K,V> e : A[i]){
+            if (e.getKey().equals(c) && e.getValue().equals(v)){
+                res.addLast(e);
+                remove(e);
+                tamanio--;
+            }
+        }
+        return res;
+    }
 }
