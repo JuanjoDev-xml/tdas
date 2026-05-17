@@ -4,36 +4,60 @@ import ar.edu.uns.cs.ed.tdas.excepciones.BoundaryViolationException;
 import ar.edu.uns.cs.ed.tdas.excepciones.EmptyTreeException;
 import ar.edu.uns.cs.ed.tdas.excepciones.InvalidOperationException;
 import ar.edu.uns.cs.ed.tdas.excepciones.InvalidPositionException;
+import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
+import ar.edu.uns.cs.ed.tdas.Position;
 
-public class Arbol implements Tree{
+public class Arbol<E> implements Tree<E>{
     // Atributos de instancia
     protected int tamanio;
     protected TNodo raiz;
-
-
+    // Constructores
+    public Arbol(){
+        tamanio = 0;
+        raiz = null;
+    }
+    // Métodos
+    private TNodo<E> checkPosition(Position<E> p){
+        try{
+            if (p == null) throw new InvalidPositionException("Posición nula");
+            if (p.element() == null) throw new InvalidPositionException("Posición removida");
+            return (TNodo<E>) p;
+        }
+        catch(ClassCastException e){
+            throw new InvalidPositionException("p no es un nodo del árbol");
+        }
+    }
     /**
 	 * Consulta la cantidad de nodos en el árbol.
 	 * @return Cantidad de nodos en el árbol.
 	 */
-	public int size();
+	public int size(){
+        return tamanio;
+    }
 	
 	/**
 	 * Consulta si el árbol está vacío.
 	 * @return Verdadero si el árbol está vacío, falso en caso contrario.
 	 */
-	public boolean isEmpty();
+	public boolean isEmpty(){
+        return raiz == null;
+    }
 	
 	/**
 	 * Devuelve un iterador de los elementos almacenados en el árbol en preorden.
 	 * @return Iterador de los elementos almacenados en el árbol.
 	 */
-	public Iterator<E> iterator();
+	public Iterator<E> iterator(){
+
+    }
 	
 	/**
 	 * Devuelve una colección iterable de las posiciones de los nodos del árbol.
 	 * @return Colección iterable de las posiciones de los nodos del árbol.
 	 */
-	public Iterable<Position<E>> positions();
+	public Iterable<Position<E>> positions(){
+
+    }
 	
 	/**
 	 * Reemplaza el elemento almacenado en la posición dada por el elemento pasado por parámetro. Devuelve el elemento reemplazado.
@@ -42,7 +66,9 @@ public class Arbol implements Tree{
 	 * @return Elemento reemplazado.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida.
 	 */
-	public E replace(Position<E> v, E e);
+	public E replace(Position<E> v, E e){
+        TNodo<E> nodo = checkPosition(v);
+    }
 	
 	/**
 	 * Devuelve la posición de la raíz del árbol.
