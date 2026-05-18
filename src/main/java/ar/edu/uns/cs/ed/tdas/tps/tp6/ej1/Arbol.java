@@ -199,7 +199,7 @@ public class Arbol<E> implements Tree<E>{
 		PositionList<TNodo<E>> hijos = padre.getHijos();
 		// Buscar donde esta rb en hijos de p
 		boolean encontre = false;
-		Position<TNodo<E>> pp = hijos.first();
+		Position<TNodo<E>> pp = hijos.first(); // Por qué Position<TNodo<E>> y no TNodo<E> ?????????????????????
 		while (pp != null && !encontre){
 			if (hd == pp.element()) encontre = true;
 			else pp = (pp != hijos.last() ? hijos.next(pp) : null);
@@ -218,7 +218,26 @@ public class Arbol<E> implements Tree<E>{
 	 * @return La posición del nuevo nodo creado.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida, o el árbol está vacío, o la posición lb no corresponde a un nodo hijo del nodo referenciado por p.
 	 */
-	public Position<E> addAfter (Position<E> p, Position<E> lb, E e);
+	public Position<E> addAfter (Position<E> p, Position<E> lb, E e){
+		if (isEmpty()) throw new InvalidPositionException("Árbol vacío");
+		TNodo<E> padre = checkPosition(p);
+		TNodo<E> hi = checkPosition(lb);
+		TNodo<E> nuevo = new TNodo<E>(e);
+		PositionList<TNodo<E>> hijos = padre.getHijos();
+		boolean encontre = false;
+		Position<TNodo<E>> pp = hijos.first(); // Por qué Position<TNodo<E>> y no TNodo<E> ?????????????????????
+		while (pp != null && !encontre) {
+			if (pp.element() == hi) encontre = true;
+			else{
+				if (pp == hijos.last()) pp = null;
+				else pp = hijos.next(pp); 
+			}
+		}
+		if (!encontre) throw new InvalidPositionException("p no es padre de lb");
+		hijos.addAfter(pp, nuevo);
+		tamanio++;
+		return nuevo;
+	}
 	
 	/**
 	 * Elimina el nodo referenciado por una posición dada, si se trata de un nodo externo. 
