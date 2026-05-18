@@ -10,7 +10,7 @@ import ar.edu.uns.cs.ed.tdas.Position;
 public class Arbol<E> implements Tree<E>{
     // Atributos de instancia
     protected int tamanio;
-    protected TNodo raiz;
+    protected TNodo<E> raiz;
     // Constructores
     public Arbol(){
         tamanio = 0;
@@ -68,6 +68,12 @@ public class Arbol<E> implements Tree<E>{
 	 */
 	public E replace(Position<E> v, E e){
         TNodo<E> nodo = checkPosition(v);
+        if (raiz.equals(nodo)){
+			E res = raiz.element();
+			raiz.setElemento(e);
+			return res;
+		}
+
     }
 	
 	/**
@@ -75,7 +81,10 @@ public class Arbol<E> implements Tree<E>{
 	 * @return Posición de la raíz del árbol.
 	 * @throws EmptyTreeException si el árbol está vacío.
 	 */
-	public Position<E> root();
+	public Position<E> root(){
+		if (isEmpty()) throw new EmptyTreeException("Árbol vacío");
+		return raiz;
+	}
 	
 	/**
 	 * Devuelve la posición del nodo padre del nodo correspondiente a una posición dada.
@@ -84,7 +93,11 @@ public class Arbol<E> implements Tree<E>{
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida.
 	 * @throws BoundaryViolationException si la posición pasada por parámetro corresponde a la raíz del árbol.
 	 */
-	public Position<E> parent(Position<E> v);
+	public Position<E> parent(Position<E> v){
+		TNodo<E> nodo = checkPosition(v);
+		if (nodo.equals(root())) throw new BoundaryViolationException("La posición pasada por parámetro es la raíz");
+		return nodo.getPadre();
+	}
 	
 	/**
 	 * Devuelve una colección iterable de los hijos del nodo correspondiente a una posición dada.
@@ -100,7 +113,10 @@ public class Arbol<E> implements Tree<E>{
 	 * @return Verdadero si la posición pasada por parámetro corresponde a un nodo interno, falso en caso contrario.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida.
 	 */
-	public boolean isInternal(Position<E> v);
+	public boolean isInternal(Position<E> v){
+		TNodo<E> nodo = checkPosition(v);
+		return !nodo.getHijos().isEmpty();
+	}
 	
 	/**
 	 * Consulta si una posición dada corresponde a un nodo externo.
