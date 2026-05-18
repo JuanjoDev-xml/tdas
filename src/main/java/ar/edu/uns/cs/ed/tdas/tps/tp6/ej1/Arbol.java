@@ -174,7 +174,14 @@ public class Arbol<E> implements Tree<E>{
 	 * @return La posición del nuevo nodo creado.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida o el árbol está vacío.
 	 */
-	public Position<E> addLastChild(Position<E> p, E e);
+	public Position<E> addLastChild(Position<E> p, E e){
+		if (isEmpty()) throw new InvalidPositionException("Árbol vacío");
+		TNodo<E> padre = checkPosition(p);
+		TNodo<E> nuevo = new TNodo<E>(e);
+		padre.getHijos().addLast(nuevo);
+		tamanio++;
+		return nuevo;
+	}
 	
 	/**
 	 * Agrega un nodo con rótulo e como hijo de un nodo padre dado. El nuevo nodo se agregará delante de otro nodo también dado.
