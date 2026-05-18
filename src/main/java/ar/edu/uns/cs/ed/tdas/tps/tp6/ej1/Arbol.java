@@ -191,7 +191,24 @@ public class Arbol<E> implements Tree<E>{
 	 * @return La posición del nuevo nodo creado.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida, o el árbol está vacío, o la posición rb no corresponde a un nodo hijo del nodo referenciado por p.
 	 */
-	public Position<E> addBefore(Position<E> p, Position<E> rb, E e);
+	public Position<E> addBefore(Position<E> p, Position<E> rb, E e){
+		if (isEmpty()) throw new InvalidPositionException("Árbol vacío");
+		TNodo<E> padre = checkPosition(p);
+		TNodo<E> hd = checkPosition(rb);
+		TNodo<E> nuevo = new TNodo<E>(e);
+		PositionList<TNodo<E>> hijos = padre.getHijos();
+		// Buscar donde esta rb en hijos de p
+		boolean encontre = false;
+		Position<TNodo<E>> pp = hijos.first();
+		while (pp != null && !encontre){
+			if (hd == pp.element()) encontre = true;
+			else pp = (pp != hijos.last() ? hijos.next(pp) : null);
+		}
+		if (!encontre) throw new InvalidPositionException("p no es padre de rb");
+		hijos.addBefore(pp, nuevo);
+		tamanio++;
+		return nuevo;
+	}
 
 	/**
 	 * Agrega un nodo con rótulo e como hijo de un nodo padre dado. El nuevo nodo se agregará a continuación de otro nodo también dado.
