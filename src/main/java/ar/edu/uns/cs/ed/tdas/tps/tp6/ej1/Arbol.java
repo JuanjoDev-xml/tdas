@@ -6,6 +6,7 @@ import ar.edu.uns.cs.ed.tdas.excepciones.InvalidOperationException;
 import ar.edu.uns.cs.ed.tdas.excepciones.InvalidPositionException;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.Position;
+import java.util.Iterator;
 
 public class Arbol<E> implements Tree<E>{
     // Atributos de instancia
@@ -244,7 +245,31 @@ public class Arbol<E> implements Tree<E>{
 	 * @param n Posición del nodo a eliminar.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida o no corresponde a un nodo externo, o el árbol está vacío.
 	 */
-	public void removeExternalNode (Position<E> p);
+	public void removeExternalNode (Position<E> p){
+		if (isEmpty()) throw new InvalidPositionException("Árbol vacío");
+		TNodo<E> nodo = checkPosition(p);
+		if (!isExternal(nodo)) throw new InvalidPositionException("p no es una hoja");
+		if (p == root()){
+			tamanio = 0;
+			raiz.setElemento(null);
+			return;
+		}
+		TNodo<E> padre = nodo.getPadre();
+		PositionList<TNodo<E>> hijosPadre = padre.getHijos();
+		boolean encontre = false;
+		Position<TNodo<E>> pp = null;
+		Iterable<Position<TNodo<E>>> posiciones = hijosPadre.positions();
+		Iterator<Position<TNodo<E>>> it = posiciones.iterator();
+		while (it.hasNext() && !encontre){
+			pp = it.next();
+			if (pp.element().equals(nodo))
+				encontre = true;
+		}
+		if (!encontre) throw new InvalidPositionException("p no aparece en los hijos de su padre");
+		hijosPadre.remove(pp);
+		nodo.setElemento(null);
+		tamanio--;
+	}
 	
 	/**
 	 * Elimina el nodo referenciado por una posición dada, si se trata de un nodo interno. Los hijos del nodo eliminado lo reemplazan en el mismo orden en el que aparecen. 
