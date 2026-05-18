@@ -124,7 +124,10 @@ public class Arbol<E> implements Tree<E>{
 	 * @return Verdadero si la posición pasada por parámetro corresponde a un nodo externo, falso en caso contrario.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida.
 	 */
-	public boolean isExternal(Position<E> v);
+	public boolean isExternal(Position<E> v){
+		TNodo<E> nodo = checkPosition(v);
+		return nodo.getHijos().isEmpty();
+	}
 	
 	/**
 	 * Consulta si una posición dada corresponde a la raíz del árbol.
@@ -132,8 +135,11 @@ public class Arbol<E> implements Tree<E>{
 	 * @return Verdadero, si la posición pasada por parámetro corresponde a la raíz del árbol,falso en caso contrario.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida.
 	 */
-	public boolean isRoot(Position<E> v);
-	
+	public boolean isRoot(Position<E> v){
+		TNodo<E> nodo = checkPosition(v);
+		return nodo.getPadre() == null;
+	}
+
 	/**
 	 * Crea un nodo con rótulo e como raíz del árbol.
 	 * @param E Rótulo que se asignará a la raíz del árbol.
