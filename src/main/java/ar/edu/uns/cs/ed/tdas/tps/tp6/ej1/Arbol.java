@@ -145,7 +145,11 @@ public class Arbol<E> implements Tree<E>{
 	 * @param E Rótulo que se asignará a la raíz del árbol.
 	 * @throws InvalidOperationException si el árbol ya tiene un nodo raíz.
 	 */
-	public void createRoot(E e);
+	public void createRoot(E e){
+		if (raiz != null) throw new InvalidOperationException("El árbol ya tiene raíz");
+		raiz = new TNodo<E>(e);
+		tamanio++;
+	}
 	
 	/**
 	 * Agrega un nodo con rótulo e como primer hijo de un nodo dado.
