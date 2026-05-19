@@ -343,4 +343,24 @@ public class Arbol<E> implements Tree<E>{
 		else
 			removeExternalNode(p);
 	}
+
+
+
+	// Ejercicio 2
+
+	// eliminar del árbol receptor del mensaje a la posición p siempre que p sea el último hijo
+	// (de izq a der) de su padre. La raíz no se considera último hijo, en este caso
+	// el método deberá lanzar InvalidOperationException. Si la posición p es
+	// inválida el método deberá lanzar InvalidPositionException.
+
+	public void eliminarUltimoHijo(Position<E> p){
+		TNodo<E> nodo = checkPosition(p);
+		if (nodo == raiz) throw new InvalidOperationException("La raíz no se considera último hijo");
+		TNodo<E> padre = nodo.getPadre();
+		PositionList<TNodo<E>> hermanos = padre.getHijos();
+		if (hermanos.last().element() == nodo){
+			removeNode(nodo);
+		}
+
+	}
 }
