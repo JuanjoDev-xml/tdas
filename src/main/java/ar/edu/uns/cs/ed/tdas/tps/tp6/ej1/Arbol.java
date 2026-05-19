@@ -49,7 +49,11 @@ public class Arbol<E> implements Tree<E>{
 	 * @return Iterador de los elementos almacenados en el árbol.
 	 */
 	public Iterator<E> iterator(){
-
+		PositionList<E> l = new ListaDobleEnlazadaCentinela<>();
+		for (Position<E> p : positions()){
+			l.addLast(p.element());
+		}
+		return l.iterator();
     }
 	
 	/**
