@@ -7,6 +7,8 @@ import ar.edu.uns.cs.ed.tdas.excepciones.InvalidPositionException;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.Position;
 import java.util.Iterator;
+import ar.edu.uns.cs.ed.tdas.tdamapeo.Map;
+import ar.edu.uns.cs.ed.tdas.tps.tp5.ej2.MapeoConHashAbierto;
 
 public class Arbol<E> implements Tree<E>{
     // Atributos de instancia
@@ -353,7 +355,7 @@ public class Arbol<E> implements Tree<E>{
 	// el método deberá lanzar InvalidOperationException. Si la posición p es
 	// inválida el método deberá lanzar InvalidPositionException.
 
-	public void eliminarUltimoHijo(Position<E> p){
+	public void eliminarUltimoHijo(Position<E> p){ //O(n) ???????
 		TNodo<E> nodo = checkPosition(p);
 		if (nodo == raiz) throw new InvalidOperationException("La raíz no se considera último hijo");
 		TNodo<E> padre = nodo.getPadre();
@@ -361,6 +363,41 @@ public class Arbol<E> implements Tree<E>{
 		if (hermanos.last().element() == nodo){
 			removeNode(nodo);
 		}
+	}
+
+
+
+	// Ejercicio 3
+
+	// retornar un mapeo con cada uno de los caracteres del árbol y la cantidad
+	// de veces que aparece cada carácter en el árbol. Utilice un recorrido en preorden.
+
+	public Map<Character, Integer> cantidadRepeticiones(Tree<Character> t){
+		MapeoConHashAbierto<Character, Integer> res = new MapeoConHashAbierto<Character, Integer>();
+		TNodo<Character> raizDeT = checkPositionChar(t.root());
+		preorden(t, raizDeT);
+		return (Map<Character, Integer>) res;
+	}
+
+	private void preorden(Tree<Character> t, TNodo<Character> v){
+		visitar(t, v);
+		for (TNodo<Character> w : v.getHijos()){
+			preorden(t, w);
+		}
+	}
+
+	private void visitar(Tree<Character> t, TNodo<Character> v){
 
 	}
+
+	private TNodo<Character> checkPositionChar(Position<Character> p){
+        try{
+            if (p == null) throw new InvalidPositionException("Posición nula");
+            if (p.element() == null) throw new InvalidPositionException("Posición removida");
+            return (TNodo<Character>) p;
+        }
+        catch(ClassCastException e){
+            throw new InvalidPositionException("p no es un nodo del árbol");
+        }
+    }
 }
