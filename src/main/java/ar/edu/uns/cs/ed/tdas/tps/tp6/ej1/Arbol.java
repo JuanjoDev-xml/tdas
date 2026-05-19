@@ -318,5 +318,12 @@ public class Arbol<E> implements Tree<E>{
 	 * @param n Posición del nodo a eliminar.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida o corresponde a la raíz (con más de un hijo), o el árbol está vacío.
 	 */
-	public void removeNode (Position<E> p);
+	public void removeNode (Position<E> p){
+		if (isEmpty()) throw new InvalidPositionException("Árbol vacío");
+		TNodo<E> nodo = checkPosition(p);
+		if (isInternal(nodo))
+			removeInternalNode(p);
+		else
+			removeExternalNode(p);
+	}
 }
