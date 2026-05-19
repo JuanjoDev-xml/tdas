@@ -82,12 +82,9 @@ public class Arbol<E> implements Tree<E>{
 	 */
 	public E replace(Position<E> v, E e){
         TNodo<E> nodo = checkPosition(v);
-        if (raiz.equals(nodo)){
-			E res = raiz.element();
-			raiz.setElemento(e);
-			return res;
-		}
-
+		E res = nodo.element();
+		nodo.setElemento(e);
+		return res;
     }
 	
 	/**
