@@ -61,8 +61,17 @@ public class Arbol<E> implements Tree<E>{
 	 * @return Colección iterable de las posiciones de los nodos del árbol.
 	 */
 	public Iterable<Position<E>> positions(){
-
-    }
+		PositionList<Position<E>> l = new ListaDobleEnlazadaCentinela<Position<E>>();
+		// Si el árbol no está vacío, hago un recorrido preorden desde la raíz:
+		if (!isEmpty())
+			pre(raiz, l);
+		return l;
+	}
+	private void pre(TNodo<E> v, PositionList<Position<E>> l) {
+		l.addLast( v ); // La visita de v consiste de encolar v en l
+		for( TNodo<E> h : v.getHijos()) // para cada hijo h de v hacer
+			pre( h, l ); // preorden de h
+	}
 	
 	/**
 	 * Reemplaza el elemento almacenado en la posición dada por el elemento pasado por parámetro. Devuelve el elemento reemplazado.
