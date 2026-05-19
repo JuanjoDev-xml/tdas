@@ -250,6 +250,7 @@ public class Arbol<E> implements Tree<E>{
 		TNodo<E> nodo = checkPosition(p);
 		if (!isExternal(nodo)) throw new InvalidPositionException("p no es una hoja");
 		if (p == root()){
+			raiz = null;
 			tamanio = 0;
 			raiz.setElemento(null);
 			return;
@@ -277,7 +278,39 @@ public class Arbol<E> implements Tree<E>{
 	 * @param n Posición del nodo a eliminar.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida o no corresponde a un nodo interno o corresponde a la raíz (con más de un hijo), o el árbol está vacío.
 	 */
-	public void removeInternalNode (Position<E> p);
+	public void removeInternalNode (Position<E> p){
+		if (isEmpty()) throw new InvalidPositionException("Árbol vacío");
+		TNodo<E> nodo = checkPosition(p);
+		if (!isInternal(nodo)) throw new InvalidOperationException("p no es un nodo interno");
+		if (p == root()){
+			if (raiz.getHijos().size() != 1) throw new InvalidPositionException("p es raíz y tiene más de un hijo");
+			TNodo<E> unicoHijo = nodo.getHijos().first().element();
+			raiz = unicoHijo;
+			unicoHijo.setPadre(null);
+		}
+		else{
+			TNodo<E> padre = nodo.getPadre();
+			PositionList<TNodo<E>> hermanos = padre.getHijos();
+			Position<TNodo<E>> posNodoEnH = null;
+			for (Position<TNodo<E>> pos : hermanos.positions()){
+				if (pos.element() == nodo){
+					posNodoEnH = pos;
+					break;
+				}
+			}
+			if (posNodoEnH == null){
+                throw new InvalidPositionException("p no aparece en la lista de hijos de su padre");
+            }
+            for (TNodo<E> nodoHijo : nodo.getHijos()){
+                nodoHijo.setPadre(padre);
+                hermanos.addBefore(posNodoEnH, nodoHijo);
+            }
+			hermanos.remove(posNodoEnH);
+		}
+		nodo.setElemento(null);
+		nodo.setPadre(null);
+		tamanio--;
+	}
 	
 	/**
 	 * Elimina el nodo referenciado por una posición dada. Si se trata de un nodo interno, los hijos del nodo eliminado lo reemplazan en el mismo orden en el que aparecen. 
