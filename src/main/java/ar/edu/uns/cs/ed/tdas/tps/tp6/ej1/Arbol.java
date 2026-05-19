@@ -106,7 +106,14 @@ public class Arbol<E> implements Tree<E>{
 	 * @return Colección iterable de los hijos del nodo correspondiente a la posición pasada por parámetro.
 	 * @throws InvalidPositionException si la posición pasada por parámetro es inválida.
 	 */
-	public Iterable<Position<E>> children(Position<E> v);
+	public Iterable<Position<E>> children(Position<E> v){
+		TNodo<E> nodo = checkPosition(v);
+		PositionList<Position<E>> res = new ListaDobleEnlazadaCentinela<>();
+		for (TNodo<E> n : nodo.getHijos()){
+			res.addLast(n);
+		}
+		return res;
+	}
 	
 	/**
 	 * Consulta si una posición corresponde a un nodo interno.
