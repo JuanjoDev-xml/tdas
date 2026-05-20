@@ -375,19 +375,23 @@ public class Arbol<E> implements Tree<E>{
 	public Map<Character, Integer> cantidadRepeticiones(Tree<Character> t){
 		MapeoConHashAbierto<Character, Integer> res = new MapeoConHashAbierto<Character, Integer>();
 		TNodo<Character> raizDeT = checkPositionChar(t.root());
-		preorden(t, raizDeT);
+		preorden(t, raizDeT, res);
 		return (Map<Character, Integer>) res;
 	}
 
-	private void preorden(Tree<Character> t, TNodo<Character> v){
-		visitar(t, v);
+	private void preorden(Tree<Character> t, TNodo<Character> v, MapeoConHashAbierto<Character,Integer> res){
+		visitar(t, v, res);
 		for (TNodo<Character> w : v.getHijos()){
-			preorden(t, w);
+			preorden(t, w, res);
 		}
 	}
 
-	private void visitar(Tree<Character> t, TNodo<Character> v){
-
+	private void visitar(Tree<Character> t, TNodo<Character> v, Map<Character, Integer> m){
+		if (m.get(v.element()) == null){
+			m.put(v.element(), 1);
+		}
+		else
+			m.put(v.element(), m.get(v.element()) + 1);
 	}
 
 	private TNodo<Character> checkPositionChar(Position<Character> p){
