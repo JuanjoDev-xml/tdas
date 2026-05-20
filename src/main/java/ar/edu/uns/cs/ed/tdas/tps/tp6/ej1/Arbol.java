@@ -413,21 +413,20 @@ public class Arbol<E> implements Tree<E>{
 	// un Iterable con las posiciones del árbol en las que aparece el String s.
 	// Utilice posorden
 
-	public Iterable<Position<String>> posApareceS(Tree<String> a, String s){
-		PositionList<TNodo<String>> res = new ListaDobleEnlazadaCentinela<>();
-		Position<String> r = a.root();
-		r = (TNodo<String>) r;
-		posOrden(a, s, r, res);
-		return res;
-	}
+	// public Iterable<Position<String>> posApareceS(Tree<String> a, String s){
+	// 	PositionList<TNodo<String>> res = new ListaDobleEnlazadaCentinela<>();
+	// 	TNodo<String> r = (TNodo<String>) a.root();
+	// 	posOrden(a, s, r, res);
+	// 	return res;
+	// }
 
-	private void posOrden(Tree<String> a, String s, TNodo<String> r, PositionList<TNodo<String>> res){
-		for (TNodo<String> n : r.getHijos()){
-			posOrden(a, s, n, res);
-		}
-		if (r.element().equals(s))
-			res.addLast(r);
-	}
+	// private void posOrden(Tree<String> a, String s, TNodo<String> r, PositionList<TNodo<String>> res){
+	// 	for (TNodo<String> n : r.getHijos()){
+	// 		posOrden(a, s, n, res);
+	// 	}
+	// 	if (r.element().equals(s))
+	// 		res.addLast(r);
+	// }
 
 
 
@@ -438,18 +437,41 @@ public class Arbol<E> implements Tree<E>{
 	// retornar la cantidad de eliminaciones realizadas
 
 	public int eliminarAparicionesE(Tree<E> a, E e){
-		int res = 0;
 		TNodo<E> raiz = checkPosition(a.root());
-		preOrden5(a, raiz, e, res);
+		return preOrden5(a, raiz, e);
+	}
+	private int preOrden5(Tree<E> a, TNodo<E> v, E e){
+		int res = 0;
+		if (v.element().equals(e)){
+			PositionList<TNodo<E>> copiaHijos = v.getHijos();
+			removeNode(v);
+			res++;
+			for (TNodo<E> w : copiaHijos){
+				res += preOrden5(a, w, e);
+			}
+		}
+		else{
+			for (TNodo<E> w : v.getHijos()){
+				res += preOrden5(a, w, e);
+			}
+		}
 		return res;
 	}
-	private void preOrden5(Tree<E> a, TNodo<E> v, E e, int res){
-		if (v.element().equals(e)){
-			removeNode(v);
-			res++; // esto funciona? tengo problemas ya que java pasa parametros por valor y no referencia???
+
+
+
+
+	// Ejercicio 6
+
+	// Dado un árbol de enteros a y un entero n, escriba un
+	// método que determine si n pertenece al árbol a. Para
+	// resolver este método utilice el iterador del árbol.
+
+	public boolean pertenece(Tree<Integer> a, int n){
+		for (Integer num : a){
+			if (num.equals(n))
+				return true;
 		}
-		for (TNodo<E> w : v.getHijos()){
-			preOrden5(a, w, e, res);
-		}
+		return false;
 	}
 }
