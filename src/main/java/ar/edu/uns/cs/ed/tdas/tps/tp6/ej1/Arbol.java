@@ -433,5 +433,23 @@ public class Arbol<E> implements Tree<E>{
 
 	// Ejercicio 5
 
-	// 
+	// dado un árbol genérico a y un elemento e, elimine de a todas las apariciones de e.
+	// Compare los elementos por equivalencia. El método debe
+	// retornar la cantidad de eliminaciones realizadas
+
+	public int eliminarAparicionesE(Tree<E> a, E e){
+		int res = 0;
+		TNodo<E> raiz = checkPosition(a.root());
+		preOrden5(a, raiz, e, res);
+		return res;
+	}
+	private void preOrden5(Tree<E> a, TNodo<E> v, E e, int res){
+		if (v.element().equals(e)){
+			removeNode(v);
+			res++; // esto funciona? tengo problemas ya que java pasa parametros por valor y no referencia???
+		}
+		for (TNodo<E> w : v.getHijos()){
+			preOrden5(a, w, e, res);
+		}
+	}
 }
