@@ -380,7 +380,7 @@ public class Arbol<E> implements Tree<E>{
 	}
 
 	private void preorden(Tree<Character> t, TNodo<Character> v, MapeoConHashAbierto<Character,Integer> res){
-		visitar(t, v, res);
+		visitar(t, v, (Map<Character, Integer>) res);
 		for (TNodo<Character> w : v.getHijos()){
 			preorden(t, w, res);
 		}
@@ -404,4 +404,34 @@ public class Arbol<E> implements Tree<E>{
             throw new InvalidPositionException("p no es un nodo del árbol");
         }
     }
+
+
+
+	// Ejercicio 4
+
+	// Dado un árbol a de Strings y un String s, programe un método tal que retorne
+	// un Iterable con las posiciones del árbol en las que aparece el String s.
+	// Utilice posorden
+
+	public Iterable<Position<String>> posApareceS(Tree<String> a, String s){
+		PositionList<TNodo<String>> res = new ListaDobleEnlazadaCentinela<>();
+		Position<String> r = a.root();
+		r = (TNodo<String>) r;
+		posOrden(a, s, r, res);
+		return res;
+	}
+
+	private void posOrden(Tree<String> a, String s, TNodo<String> r, PositionList<TNodo<String>> res){
+		for (TNodo<String> n : r.getHijos()){
+			posOrden(a, s, n, res);
+		}
+		if (r.element().equals(s))
+			res.addLast(r);
+	}
+
+
+
+	// Ejercicio 5
+
+	// 
 }
