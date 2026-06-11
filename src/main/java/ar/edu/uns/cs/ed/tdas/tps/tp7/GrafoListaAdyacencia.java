@@ -4,20 +4,29 @@ import ar.edu.uns.cs.ed.tdas.excepciones.InvalidVertexException;
 import ar.edu.uns.cs.ed.tdas.tdagrafo.Edge;
 import ar.edu.uns.cs.ed.tdas.tdagrafo.Graph;
 import ar.edu.uns.cs.ed.tdas.tdagrafo.Vertex;
+import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
+import ar.edu.uns.cs.ed.tdas.tps.tp4.ej1.ListaDobleEnlazadaCentinela;
 
 public class GrafoListaAdyacencia<V,E> implements Graph{
     // Atributos
-
+	protected PositionList<Vertice<V,E>> nodos;
+	protected PositionList<Arco<V,E>> arcos;
     // Constructor
-
+	public GrafoListaAdyacencia(){
+		nodos = new ListaDobleEnlazadaCentinela<Vertice<V,E>>();
+		arcos = new ListaDobleEnlazadaCentinela<Arco<V,E>>();
+	}
     // Métodos
-	
+
     /**
 	 * Devuelve una colección iterable de vértices.
 	 * @return Una colección iterable de vértices.
 	 */
 	public Iterable<Vertex<V>> vertices(){
-
+		PositionList<Vertex<V>> lista = new Lista<Vertex<V>>();
+		for( Vertex<V> v : nodos )
+			lista.addLast(v);
+		return lista;
     }
 	
 	/**
