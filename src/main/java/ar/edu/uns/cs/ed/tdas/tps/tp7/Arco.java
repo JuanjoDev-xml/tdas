@@ -18,5 +18,28 @@ public class Arco<V,E>
         return rotulo;
     }
     // Setters y getters
+    public void setPosicionEnIv2(Position<Arco<V,E>> p){
 
+    }
+    public void setPosicionEnIv1(Position<Arco<V,E>> p){
+
+    }
+    public void setPosEnArcos(Position<Arco<V,E>> p){
+
+    }
+    public Vertice<V,E> getV1(){
+        return v1;
+    }
+    public Vertice<V,E> getV2(){
+        return v2;
+    }
+    public Position<Arco<V,E>> getPosicionEnIv1(){
+        return posicionEnIv1;
+    }
+    public Position<Arco<V,E>> getPosicionEnIv2(){
+        return posicionEnIv2;
+    }
+    public Position<Arco<V,E>> getPosicionEnArcos(){
+        return posicionEnArcos;
+    }
 }

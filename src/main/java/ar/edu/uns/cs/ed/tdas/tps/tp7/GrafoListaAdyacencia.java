@@ -4,6 +4,7 @@ import ar.edu.uns.cs.ed.tdas.excepciones.InvalidVertexException;
 import ar.edu.uns.cs.ed.tdas.tdagrafo.Edge;
 import ar.edu.uns.cs.ed.tdas.tdagrafo.Graph;
 import ar.edu.uns.cs.ed.tdas.tdagrafo.Vertex;
+import ar.edu.uns.cs.ed.tdas.Position;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.tps.tp4.ej1.ListaDobleEnlazadaCentinela;
 
@@ -23,7 +24,7 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Una colección iterable de vértices.
 	 */
 	public Iterable<Vertex<V>> vertices(){
-		PositionList<Vertex<V>> lista = new Lista<Vertex<V>>();
+		PositionList<Vertex<V>> lista = new ListaDobleEnlazadaCentinela<Vertex<V>>();
 		for( Vertex<V> v : nodos )
 			lista.addLast(v);
 		return lista;
@@ -34,7 +35,10 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Una colección iterable de arcos.
 	 */
 	public Iterable<Edge<E>> edges(){
-
+		PositionList<Edge<E>> res = new ListaDobleEnlazadaCentinela<Edge<E>>();
+		for (Edge<E> e : arcos)
+			res.addLast(e);
+		return res;
     }
 	
 	/**
@@ -44,7 +48,11 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @throws InvalidVertexException si el vértice es inválido.
 	 */
 	public Iterable<Edge<E>> incidentEdges(Vertex<V> v){
-
+		PositionList<Edge<E>> lista = new ListaDobleEnlazadaCentinela<Edge<E>>();
+		Vertice<V,E> vert = (Vertice<V,E>) v;
+		for( Edge<E> e : vert.getAdyacentes() )
+			lista.addLast(e);
+		return lista;
     }
 	
 	
@@ -109,7 +117,10 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Un nuevo vértice insertado.
 	 */
 	public Vertex<V> insertVertex(V x){
-        
+        Vertice<V,E> v = new Vertice<V,E>(x);
+		nodos.addLast(v);
+		v.setPosicionEnNodos(nodos.last());
+		return v;
     }
 	
 	/**
@@ -121,7 +132,21 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @throws InvalidVertexException si uno de los vértices es inválido.
 	 */
 	public Edge<E> insertEdge(Vertex<V> v, Vertex<V> w, E e){
-        
+        // Obtengo los vertices v y w:
+		Vertice<V,E> vv = (Vertice<V,E>) v; Vertice<V,E> ww = (Vertice<V,E>) w;
+		Arco<V,E> arco = new Arco<V,E>( x, vv, ww ); // Construyo un arco
+		// Agrego el arco al final de la lista de adyacentes de v y anoto su posición:
+		vv.getAdyacentes().addLast( arco );
+		arco.setPosicionEnIv1( vv.getAdyacentes().last() );
+		// Agrego el arco al final de la lista de adyacentes
+		// de w y anoto su posición:
+		ww.getAdyacentes().addLast( arco );
+		arco.setPosicionEnIv2( ww.getAdyacentes().last() );
+		// Agrego el arco al final de lista de arcos y le seteo
+		// su posición:
+		arcos.addLast(arco);
+		arco.setPosEnArcos(arcos.last());
+		return arco;
     }
 	
 	/**
@@ -130,9 +155,11 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return rótulo de V.
 	 * @throws InvalidVertexException si el vértice es inválido.
 	 */
-	public V removeVertex(Vertex<V> v){
-        
-    }
+	// Precondición: Asume que v no tiene arcos adyacentes.
+	public V removeVertex(Vertex<V> v) {
+		Position<Vertice<V,E>> pos = ((Vertice<V,E>) v).getPosicionEnNodos();
+		return nodos.remove( pos ).element();
+	}
 	
 	/**
 	 * Remueve un arco e y retorna su rótulo.
@@ -141,6 +168,15 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @throws InvalidEdgeException si el arco es inválido.
 	 */
 	public E removeEdge(Edge<E> e){
-        
+        Arco<V,E> ee = (Arco<V,E>) e; // Recupero extremos del arco:
+		Vertice<V,E> v1 = ee.getV1(); Vertice<V,E> v2 = ee.getV2();
+		// Elimino a e de la lista de adyacentes de v1:
+		v1.getAdyacentes().remove(ee.getPosicionEnIv1());
+		// Elimino a e de la lista de adyacentes de v2:
+		v2.getAdyacentes().remove(ee.getPosicionEnIv2());
+		// Elimino a e de la lista de arcos y retorno
+		// el rótulo del arco:
+		Position<Arco<V,E>> pee = ee.getPosicionEnArcos();
+		return arcos.remove(pee).element();
     }
 }
