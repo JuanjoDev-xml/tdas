@@ -134,7 +134,7 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	public Edge<E> insertEdge(Vertex<V> v, Vertex<V> w, E e){
         // Obtengo los vertices v y w:
 		Vertice<V,E> vv = (Vertice<V,E>) v; Vertice<V,E> ww = (Vertice<V,E>) w;
-		Arco<V,E> arco = new Arco<V,E>( x, vv, ww ); // Construyo un arco
+		Arco<V,E> arco = new Arco<V,E>(e, vv, ww ); // Construyo un arco
 		// Agrego el arco al final de la lista de adyacentes de v y anoto su posición:
 		vv.getAdyacentes().addLast( arco );
 		arco.setPosicionEnIv1( vv.getAdyacentes().last() );
