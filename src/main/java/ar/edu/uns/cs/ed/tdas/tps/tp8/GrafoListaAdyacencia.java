@@ -64,16 +64,12 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @throws InvalidVertexException si el vértice es inválido.
 	 * @throws InvalidEdgeException si el arco es inválido.
 	 */
-	public Vertex<V> opposite(Vertex<V> v, Edge<E> e){ // ?????? O(deg(G)) ?
-        Vertice<V,E> vert = (Vertice<V,E>) v;
-		for (Arco<V,E> a : vert.getAdyacentes()){
-			if (a.element().equals(e)){
-				if (a.getV1().equals(vert))
-					return a.getV2();
-				else if (a.getV2().equals(vert))
-					return a.getV1();
-			}	
-		}
+	public Vertex<V> opposite(Vertex<V> v, Edge<E> e){ // ?????? O(1) ?
+        Arco<V,E> a =(Arco<V,E>) e;
+		Vertice<V,E> vv = (Vertice<V,E>) v;
+		if (a.getV1() == vv) return a.getV2();
+		if (a.getV2() == vv) return a.getV1();
+		throw new InvalidEdgeException("El arco no es incidente al vértice");
     }
 	
 	/**
@@ -82,8 +78,8 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Un Arreglo de 2 elementos con los extremos de un Arco e.
 	 * @throws InvalidEdgeException si el arco es inválido.
 	 */
-	public Vertex<V> [] endvertices(Edge<E> e){ // ????????? O(1) ???
-        Vertex<V> [] res = (Vertice<V,E> []) new Object [2];
+	public Vertex<V> [] endVertices(Edge<E> e){ // ????????? O(1) ???
+        Vertex<V> [] res = (Vertex<V> []) new Vertice [2];
 		Arco<V,E> arc = (Arco<V,E>) e;
 		res[0] = arc.getV1();
 		res[1] = arc.getV2();
@@ -97,11 +93,11 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Verdadero si el vértice w es adyacente al vértice v, falso en caso contrario.
 	 * @throws InvalidVertexException si uno de los vértices es inválido.
 	 */
-	public boolean areAdjacent(Vertex<V> v, Vertex<V> w){ // ?????? O(deg(g)) ??
+	public boolean areadjacent(Vertex<V> v, Vertex<V> w){ // ?????? O(deg(g)) ??
         Vertice<V,E> vv = (Vertice<V,E>) v;
 		Vertice<V,E> ww = (Vertice<V,E>) w;
 		for (Arco<V,E> a : ww.getAdyacentes()){
-			if (a.getV1().equals(vv) || a.getV2().equals(vv))
+			if (a.getV1() == vv || a.getV2() == vv)
 				return true;
 		}
 		return false;
