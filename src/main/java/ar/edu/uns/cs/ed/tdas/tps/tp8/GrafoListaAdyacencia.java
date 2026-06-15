@@ -83,7 +83,9 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @throws InvalidEdgeException si el arco es inválido.
 	 */
 	public Vertex<V> [] endvertices(Edge<E> e){
-        
+        Vertice<V,E> [] res = (Vertice<V,E> []) new Object [2];
+		Arco<V,E> arc = (Arco<V,E>) e;
+		
     }
 	
 	/**
