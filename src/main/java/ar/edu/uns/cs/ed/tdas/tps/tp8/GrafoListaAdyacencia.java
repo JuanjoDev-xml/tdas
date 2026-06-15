@@ -1,4 +1,4 @@
-package ar.edu.uns.cs.ed.tdas.tps.tp7;
+package ar.edu.uns.cs.ed.tdas.tps.tp8;
 import ar.edu.uns.cs.ed.tdas.excepciones.InvalidEdgeException;
 import ar.edu.uns.cs.ed.tdas.excepciones.InvalidVertexException;
 import ar.edu.uns.cs.ed.tdas.tdagrafo.Edge;
@@ -47,7 +47,7 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Una colección iterable de arcos incidentes a un vértice v.
 	 * @throws InvalidVertexException si el vértice es inválido.
 	 */
-	public Iterable<Edge<E>> incidentEdges(Vertex<V> v){
+	public Iterable<Edge<E>> incidentEdges(Vertex v){
 		PositionList<Edge<E>> lista = new ListaDobleEnlazadaCentinela<Edge<E>>();
 		Vertice<V,E> vert = (Vertice<V,E>) v;
 		for( Edge<E> e : vert.getAdyacentes() )
@@ -64,8 +64,16 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @throws InvalidVertexException si el vértice es inválido.
 	 * @throws InvalidEdgeException si el arco es inválido.
 	 */
-	public Vertex<V> opposite(Vertex<V> v, Edge<E> e){
-        
+	public Vertex<V> opposite(Vertex<V> v, Edge<E> e){ // ?????? O(deg(G)) ?
+        Vertice<V,E> vert = (Vertice<V,E>) v;
+		for (Arco<V,E> a : vert.getAdyacentes()){
+			if (a.element().equals(e)){
+				if (a.getV1().equals(vert))
+					return a.getV2();
+				else if (a.getV2().equals(vert))
+					return a.getV1();
+			}	
+		}
     }
 	
 	/**
