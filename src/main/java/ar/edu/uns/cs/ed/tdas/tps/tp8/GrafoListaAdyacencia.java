@@ -82,10 +82,12 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Un Arreglo de 2 elementos con los extremos de un Arco e.
 	 * @throws InvalidEdgeException si el arco es inválido.
 	 */
-	public Vertex<V> [] endvertices(Edge<E> e){
-        Vertice<V,E> [] res = (Vertice<V,E> []) new Object [2];
+	public Vertex<V> [] endvertices(Edge<E> e){ // ????????? O(1) ???
+        Vertex<V> [] res = (Vertice<V,E> []) new Object [2];
 		Arco<V,E> arc = (Arco<V,E>) e;
-		
+		res[0] = arc.getV1();
+		res[1] = arc.getV2();
+		return res;
     }
 	
 	/**
