@@ -17,6 +17,9 @@ public class Arco<V,E> implements Edge<E> {
         return rotulo;
     }
     // Setters y getters
+    public void setRotulo(E e){
+        rotulo = e;
+    }
     public void setPosicionEnIv2(Position<Arco<V,E>> p){
 
     }

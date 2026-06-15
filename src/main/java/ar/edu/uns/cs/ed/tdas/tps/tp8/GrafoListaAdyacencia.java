@@ -128,8 +128,11 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return El rótulo anterior del arco e al reemplazarlo por un rótulo x.
 	 * @throws InvalidEdgeException si el arco es inválido.
 	 */
-	public E replace(Edge<E> e, E x){
-        
+	public E replace(Edge<E> e, E x){ // ??????????????
+        Arco<V,E> a = (Arco<V,E>) e;
+		E res = a.element();
+		a.setRotulo(x);
+		return res;
     }
 	
 	/**
