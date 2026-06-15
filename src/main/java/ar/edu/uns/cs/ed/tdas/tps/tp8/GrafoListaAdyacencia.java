@@ -97,8 +97,14 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Verdadero si el vértice w es adyacente al vértice v, falso en caso contrario.
 	 * @throws InvalidVertexException si uno de los vértices es inválido.
 	 */
-	public boolean areAdjacent(Vertex<V> v,Vertex<V> w){
-        
+	public boolean areAdjacent(Vertex<V> v, Vertex<V> w){ // ?????? O(deg(g)) ??
+        Vertice<V,E> vv = (Vertice<V,E>) v;
+		Vertice<V,E> ww = (Vertice<V,E>) w;
+		for (Arco<V,E> a : ww.getAdyacentes()){
+			if (a.getV1().equals(vv) || a.getV2().equals(vv))
+				return true;
+		}
+		return false;
     }
 	
 	/**
@@ -108,8 +114,11 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return El rótulo anterior del vértice v al reemplazarlo por un rótulo x.
 	 * @throws InvalidVertexException si el vértice es inválido.
 	 */
-	public V replace(Vertex<V> v, V x){
-        
+	public V replace(Vertex<V> v, V x){ // ?????  O(1)?
+        Vertice<V,E> vv = (Vertice<V,E>) v;
+		V res = vv.element();
+		vv.setRotulo(x);
+		return res;
     }
 
 	/**
