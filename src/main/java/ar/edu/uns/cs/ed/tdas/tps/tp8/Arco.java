@@ -1,8 +1,9 @@
 package ar.edu.uns.cs.ed.tdas.tps.tp8;
 import ar.edu.uns.cs.ed.tdas.tdagrafo.Edge;
+import ar.edu.uns.cs.ed.tdas.tps.tp5.ej2.MapeoConHashAbierto;
 import ar.edu.uns.cs.ed.tdas.Position;
 
-public class Arco<V,E> implements Edge<E> {
+public class Arco<V,E> extends MapeoConHashAbierto<Object, Object> implements Edge<E> {
     private E rotulo;
     private Vertice<V,E> v1, v2;
     private Position<Arco<V,E>> posicionEnArcos;

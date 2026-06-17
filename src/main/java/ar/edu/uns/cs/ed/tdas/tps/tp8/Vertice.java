@@ -3,8 +3,9 @@ import ar.edu.uns.cs.ed.tdas.tdagrafo.Vertex;
 import ar.edu.uns.cs.ed.tdas.Position;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.tps.tp4.ej1.ListaDobleEnlazadaCentinela;
+import ar.edu.uns.cs.ed.tdas.tps.tp5.ej2.MapeoConHashAbierto;
 
-public class Vertice<V,E> implements Vertex<V> {
+public class Vertice<V,E>  extends MapeoConHashAbierto<Object, Object> implements Vertex<V>{
     private V rotulo;
     private PositionList<Arco<V,E>> adyacentes;
     private Position<Vertice<V,E>> posicionEnNodos;

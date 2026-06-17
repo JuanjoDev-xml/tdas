@@ -8,7 +8,7 @@ import ar.edu.uns.cs.ed.tdas.Position;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.tps.tp4.ej1.ListaDobleEnlazadaCentinela;
 
-public class GrafoListaAdyacencia<V,E> implements Graph{
+public class GrafoListaAdyacencia<V,E> implements Graph<V,E>{
     // Atributos
 	protected PositionList<Vertice<V,E>> nodos;
 	protected PositionList<Arco<V,E>> arcos;
@@ -78,7 +78,7 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Un Arreglo de 2 elementos con los extremos de un Arco e.
 	 * @throws InvalidEdgeException si el arco es inválido.
 	 */
-	public Vertex<V> [] endVertices(Edge<E> e){ // ????????? O(1) ???
+	public Vertex<V> [] endvertices(Edge<E> e){ // ????????? O(1) ???
         Vertex<V> [] res = (Vertex<V> []) new Vertice [2];
 		Arco<V,E> arc = (Arco<V,E>) e;
 		res[0] = arc.getV1();
@@ -93,7 +93,7 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 	 * @return Verdadero si el vértice w es adyacente al vértice v, falso en caso contrario.
 	 * @throws InvalidVertexException si uno de los vértices es inválido.
 	 */
-	public boolean areadjacent(Vertex<V> v, Vertex<V> w){ // ?????? O(deg(g)) ??
+	public boolean areAdjacent(Vertex<V> v, Vertex<V> w){ // ?????? O(deg(g)) ??
         Vertice<V,E> vv = (Vertice<V,E>) v;
 		Vertice<V,E> ww = (Vertice<V,E>) w;
 		for (Arco<V,E> a : ww.getAdyacentes()){
@@ -199,4 +199,55 @@ public class GrafoListaAdyacencia<V,E> implements Graph{
 		Position<Arco<V,E>> pee = ee.getPosicionEnArcos();
 		return arcos.remove(pee).element();
     }
+
+
+
+	// -------------------------------------------------------
+
+	private final Object VISITADO = new Object();
+	private final Object NOVISITADO = new Object();
+	private final Object ESTADO = new Object();
+
+	// Ejercicio 3
+	// Dado un grafo no dirigido g, escriba un método que determine si g es conexo.
+	// Resuelva este ejercicio implementando un recorrido depth-first-search (DFS).
+
+	public boolean esConexo(Graph<V,E> g){
+		// DFS Shell
+		for (Vertex<V> v : g.vertices()){
+			v.put(ESTADO, NOVISITADO);
+		}
+		for (Vertex<V> v : g.vertices()){
+			if (v.get(ESTADO) == NOVISITADO)
+				dfs(g, v);
+		}
+		// me fijo si a partir de v se visitaron todos
+		for (Vertex<V> v : g.vertices())
+			if (v.get(ESTADO) == NOVISITADO)
+				return false;
+		return true;
+	}
+
+	private <V,E> void dfs(Graph<V,E> g, Vertex<V> v){
+		// procesamiento de v previo al recorrido
+
+		v.put(ESTADO, VISITADO);
+		Iterable<Edge<E>> adyacentes = g.incidentEdges(v); // si el grafo es dirigido cambiar por g.emergentEdges(v)
+		for (Edge<E> e : adyacentes){
+			Vertex<V> w = g.opposite(v, e);
+			if (w.get(ESTADO) == NOVISITADO)
+				dfs(g, w);
+		}
+		// procesamiento de v posterior al recorrido
+
+	}
+
+
+	// Ejercicio 4
+	// Dado un grafo conexo no dirigido g y dos vértices v1 y v2
+	// (pertenecientes al grafo), escriba un método que determine la longitud
+	// del camino más corto entre v1 y v2. Resuelva este ejercicio implementando un
+	// recorrido primero en anchura (Breadth-First Search - BFS).
+
+	
 }
