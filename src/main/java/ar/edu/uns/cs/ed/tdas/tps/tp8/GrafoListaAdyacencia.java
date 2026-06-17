@@ -250,29 +250,37 @@ public class GrafoListaAdyacencia<V,E> implements Graph<V,E>{
 	// recorrido primero en anchura (Breadth-First Search - BFS).
 
 	public int caminoMasCorto(Graph<V,E> g, Vertex<V> v1, Vertex<V> v2){
-		// BFS Shell (es igual a DFS Shell)
 		for (Vertex<V> v : g.vertices())
 			v.put(ESTADO, NOVISITADO);
-		for (Vertex<V> v : g.vertices())
-			if (v.get(ESTADO) == NOVISITADO)
-				bfs(g, v);
-		
+
+		return bfsDistancia(g, v1, v2);
 	}
-	private void bfs(Graph<V,E> g, Vertex<V> v){
+	private int bfsDistancia(Graph<V,E> g, Vertex<V> origen, Vertex<V> destino){
 		Queue<Vertex<V>> cola = new ColaArreglo<Vertex<V>>(100);
-		cola.enqueue(v);
-		v.put(ESTADO, VISITADO);
+		cola.enqueue(origen);
+		origen.put(ESTADO, VISITADO);
+		// Decoro el origen indicando que la distancia a sí mismo es 0
+		origen.put("DISTANCIA", 0);
+	
 		while (!cola.isEmpty()){
 			Vertex<V> u = cola.dequeue();
-			bfs(g, u);
+			// OPTIMIZACIÓN: Si 'u' es el destino, ya terminamos
+            if (u == destino) {
+                return (int) u.get("DISTANCIA");
+            }
+
 			Iterable<Edge<E>> adyacentes = g.incidentEdges(u);
 			for (Edge<E> e : adyacentes){
 				Vertex<V> x = g.opposite(u, e);
 				if (x.get(ESTADO) == NOVISITADO){
 					x.put(ESTADO, VISITADO);
+					// La distancia de x es la distancia del vértice que lo descubrió (u) + 1
+					x.put("DISTANCIA", (int) u.get("DISTANCIA") + 1);
+
 					cola.enqueue(x);
 				}
 			}
 		}
+		return -1; // retorno de seguridad, no debería llegar acá con un grafo conexo
 	}
 }
