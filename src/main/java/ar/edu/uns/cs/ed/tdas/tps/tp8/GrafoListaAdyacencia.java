@@ -283,4 +283,47 @@ public class GrafoListaAdyacencia<V,E> implements Graph<V,E>{
 		}
 		return -1; // retorno de seguridad, no debería llegar acá con un grafo conexo
 	}
+
+
+	// Ejercicio 5
+	// Dado un grafo G y dos vértices v1 y v2, escriba un método que determine si
+	// existe un camino entre v1 y v2. El método debe imprimir el camino.
+
+	public boolean existeCamino(Graph<V,E> g, Vertex<V> v1, Vertex<V> v2) {
+    	// Inicializamos todos como no visitados
+		for (Vertex<V> v : g.vertices())
+			v.put(ESTADO, NOVISITADO);
+		
+    	// Creamos la lista que va a guardar el camino actual
+		PositionList<Vertex<V>> camino = new ListaDobleEnlazadaCentinela<>();
+
+		return dfsCamino(g, v1, v2, camino);
+	}
+
+	private boolean dfsCamino(Graph<V,E> g, Vertex<V> v, Vertex<V> destino, PositionList<Vertex<V>> camino) {
+    	// Marcamos v como visitado y lo agregamos al camino actual
+		v.put(ESTADO, VISITADO);
+		camino.addLast(v);
+
+    	// Caso base: llegamos al destino → imprimimos y avisamos
+		if (v == destino) {
+			for (Vertex<V> nodo : camino)
+				System.out.print(nodo.element() + " → ");
+			System.out.println("FIN");
+			return true;
+		}
+
+    	// Caso recursivo: exploramos los vecinos no visitados
+		for (Edge<E> e : g.incidentEdges(v)) {
+			Vertex<V> w = g.opposite(v, e);
+			if (w.get(ESTADO) == NOVISITADO) {
+				if (dfsCamino(g, w, destino, camino))
+                	return true;  // si algún vecino encontró camino, propagamos
+			}
+		}
+
+    	// BACKTRACK: este vértice no llevó al destino, lo sacamos del camino
+		camino.remove(camino.last());
+		return false;
+	}
 }
