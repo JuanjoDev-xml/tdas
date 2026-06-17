@@ -7,6 +7,8 @@ import ar.edu.uns.cs.ed.tdas.tdagrafo.Vertex;
 import ar.edu.uns.cs.ed.tdas.Position;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.tps.tp4.ej1.ListaDobleEnlazadaCentinela;
+import ar.edu.uns.cs.ed.tdas.tdacola.ColaArreglo;
+import ar.edu.uns.cs.ed.tdas.tdacola.Queue;
 
 public class GrafoListaAdyacencia<V,E> implements Graph<V,E>{
     // Atributos
@@ -213,22 +215,20 @@ public class GrafoListaAdyacencia<V,E> implements Graph<V,E>{
 	// Resuelva este ejercicio implementando un recorrido depth-first-search (DFS).
 
 	public boolean esConexo(Graph<V,E> g){
-		// DFS Shell
 		for (Vertex<V> v : g.vertices()){
 			v.put(ESTADO, NOVISITADO);
 		}
-		for (Vertex<V> v : g.vertices()){
-			if (v.get(ESTADO) == NOVISITADO)
-				dfs(g, v);
-		}
-		// me fijo si a partir de v se visitaron todos
+		
+		Vertex<V> primero = g.vertices().iterator().next();
+		dfs(g, primero);
+
 		for (Vertex<V> v : g.vertices())
 			if (v.get(ESTADO) == NOVISITADO)
 				return false;
 		return true;
 	}
 
-	private <V,E> void dfs(Graph<V,E> g, Vertex<V> v){
+	private void dfs(Graph<V,E> g, Vertex<V> v){
 		// procesamiento de v previo al recorrido
 
 		v.put(ESTADO, VISITADO);
@@ -249,5 +249,30 @@ public class GrafoListaAdyacencia<V,E> implements Graph<V,E>{
 	// del camino más corto entre v1 y v2. Resuelva este ejercicio implementando un
 	// recorrido primero en anchura (Breadth-First Search - BFS).
 
-	
+	public int caminoMasCorto(Graph<V,E> g, Vertex<V> v1, Vertex<V> v2){
+		// BFS Shell (es igual a DFS Shell)
+		for (Vertex<V> v : g.vertices())
+			v.put(ESTADO, NOVISITADO);
+		for (Vertex<V> v : g.vertices())
+			if (v.get(ESTADO) == NOVISITADO)
+				bfs(g, v);
+		
+	}
+	private void bfs(Graph<V,E> g, Vertex<V> v){
+		Queue<Vertex<V>> cola = new ColaArreglo<Vertex<V>>(100);
+		cola.enqueue(v);
+		v.put(ESTADO, VISITADO);
+		while (!cola.isEmpty()){
+			Vertex<V> u = cola.dequeue();
+			bfs(g, u);
+			Iterable<Edge<E>> adyacentes = g.incidentEdges(u);
+			for (Edge<E> e : adyacentes){
+				Vertex<V> x = g.opposite(u, e);
+				if (x.get(ESTADO) == NOVISITADO){
+					x.put(ESTADO, VISITADO);
+					cola.enqueue(x);
+				}
+			}
+		}
+	}
 }
