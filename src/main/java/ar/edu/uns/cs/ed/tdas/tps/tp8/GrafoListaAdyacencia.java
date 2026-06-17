@@ -413,5 +413,29 @@ public class GrafoListaAdyacencia<V,E> implements Graph<V,E>{
 	// número de visita para encontrar aquellos nodos cuyo número de visita es
 	// menor a un valor k designado por el cliente. El programa debe ser eficiente
 
-	
+	public void nodosMenorK(Graph<V,E> g, Vertex<V> v, int k){
+		for (Vertex<V> ver : g.vertices())
+			ver.put(ESTADO, NOVISITADO);
+		bfsNodosMenor(g, v, k);
+	}
+	private void bfsNodosMenor(Graph<V,E> g, Vertex<V> v, int k){
+		Queue<Vertex<V>> cola = new ColaArreglo<>(100);
+		cola.enqueue(v);
+		v.put(ESTADO, VISITADO);
+		System.out.println(v.element());
+		int visita = 1;
+		while (!cola.isEmpty()) {
+			Vertex<V> u = cola.dequeue();
+			for (Edge<E> e :g.incidentEdges(u)){
+				Vertex<V> x = g.opposite(u, e);
+				if (x.get(ESTADO) == NOVISITADO){
+					visita++;
+					if (visita <= k) return;
+					x.put(ESTADO, VISITADO);
+					System.out.println(x.element());
+					cola.enqueue(x);
+				}
+			}
+		}
+	}
 }
