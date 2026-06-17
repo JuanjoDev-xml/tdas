@@ -326,4 +326,92 @@ public class GrafoListaAdyacencia<V,E> implements Graph<V,E>{
 		camino.remove(camino.last());
 		return false;
 	}
+
+
+	// Ejercicio 6
+	// Dado un grafo G pesado con arcos conteniendo números reales y dos vértices
+	// v1 y v2, escriba un método que encuentre el camino de costo mínimo entre v1 y v2.
+	// El método debe imprimir el camino y el costo del mismo.
+
+	private final Object DISTANCIA  = new Object();
+	private final Object PREDECESOR = new Object();
+
+	public void caminoMinimo(Graph<V,E> g, Vertex<V> v1, Vertex<V> v2) {
+
+    	// Inicialización: todos a distancia infinita, sin predecesor, no visitados
+		for (Vertex<V> v : g.vertices()) {
+			v.put(DISTANCIA,  Double.MAX_VALUE);
+			v.put(PREDECESOR, null);
+			v.put(ESTADO,     NOVISITADO);
+		}
+    	v1.put(DISTANCIA, 0.0);  // la distancia al origen es 0
+
+		while (true) {
+        	// Buscar el vértice no visitado con menor distancia conocida
+			Vertex<V> u = null;
+			double minDist = Double.MAX_VALUE;
+			for (Vertex<V> v : g.vertices()) {
+				if (v.get(ESTADO) == NOVISITADO) {
+					double dist = (Double) v.get(DISTANCIA);
+					if (dist < minDist) {
+						minDist = dist;
+						u = v;
+					}
+				}
+			}
+        	// No quedan vértices alcanzables
+			if (u == null) break;
+
+        	// "Sellamos" u: su distancia ya es definitiva
+			u.put(ESTADO, VISITADO);
+
+        	// Optimización: si sellamos el destino, ya terminamos
+			if (u == v2) break;
+
+        	// Relajar los arcos que salen de u
+			for (Edge<E> e : g.incidentEdges(u)) {
+				Vertex<V> w = g.opposite(u, e);
+				if (w.get(ESTADO) == NOVISITADO) {
+					double peso = (Double) e.element();
+					double nuevaDist = (Double) u.get(DISTANCIA) + peso;
+					// Si encontramos un camino más corto a w, actualizamos
+					if (nuevaDist < (Double) w.get(DISTANCIA)) {
+						w.put(DISTANCIA,  nuevaDist);
+						w.put(PREDECESOR, u);
+					}
+				}
+			}
+		}
+
+    	// ¿Existe camino?
+		if ((Double) v2.get(DISTANCIA) == Double.MAX_VALUE) {
+			System.out.println("No existe camino entre los vértices");
+			return;
+		}
+
+    	// Reconstruir camino: seguimos PREDECESOR de v2 hacia atrás
+		PositionList<Vertex<V>> camino = new ListaDobleEnlazadaCentinela<>();
+		Vertex<V> actual = v2;
+		while (actual != null) {
+			camino.addFirst(actual); // insertamos al frente
+			actual = (Vertex<V>) actual.get(PREDECESOR); // retrocedemos
+		}
+
+    	// Imprimir
+		for (Vertex<V> v : camino)
+			System.out.print(v.element() + " → ");
+		System.out.println("FIN");
+		System.out.println("Costo total: " + v2.get(DISTANCIA));
+	}
+
+
+
+
+	// Ejercicio 7
+	// Implemente un recorrido primero en anchura (Breadth-First Search)
+	// a partir de un vértice v. Si v es el número 1 en la visita, utilice el
+	// número de visita para encontrar aquellos nodos cuyo número de visita es
+	// menor a un valor k designado por el cliente. El programa debe ser eficiente
+
+	
 }
